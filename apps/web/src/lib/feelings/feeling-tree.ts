@@ -16,7 +16,7 @@ export const FEELING_TREE = [
   feeling('alkhawf', 'الخوف', [
     feeling('faza', 'فزع', [leaf('khaif', 'خائف')]),
     feeling('qalaq', 'قلق', [leaf('murtabik', 'مرتبك'), leaf('mudtaribalbal', 'مضطرب البال')]),
-    feeling('ghayramin', 'غير آمن', [leaf('ghayrkafi', 'غير كافي'), leaf('dhalil', 'ذليل')]),
+    feeling('ghayramin', 'غير آمن', [leaf('ghayrkafi', 'غير كافٍ'), leaf('dhalil', 'ذليل')]),
     feeling('daf', 'ضعف', [leaf('muhammash', 'مهمَّش')]),
     feeling('rafd', 'رفض', [
       leaf('mustabad', 'مستبعد'),
@@ -31,11 +31,11 @@ export const FEELING_TREE = [
     feeling('hiqd', 'حقد', [leaf('naqim', 'ناقم'), leaf('intahak', 'انتهك')]),
     feeling('ghadib', 'غاضب', [leaf('ghadban', 'غضبان'), leaf('ghayur', 'غيور')]),
     feeling('udwaniya', 'عدوانية', [leaf('istifzaz', 'استفزاز'), leaf('sharasa', 'شراسة')]),
-    feeling('ihbat', 'احباط', [leaf('munzaij', 'منزعج')]),
+    feeling('ihbat', 'إحباط', [leaf('munzaij', 'منزعج')]),
     feeling('mutabaid', 'متباعد', [leaf('munsahib', 'منسحب'), leaf('faqidalihsas', 'فاقد الإحساس')]),
     feeling('ihraj', 'إحراج', [leaf('mutashakkik', 'متشكك')]),
   ]),
-  feeling('alishmizaz', 'الإشمئزاز', [
+  feeling('alishmizaz', 'الاشمئزاز', [
     feeling('rafid', 'رافض', [leaf('naqid', 'ناقد')]),
     feeling('khaibalamal', 'خائب الأمل', [leaf('murawwa', 'مروع'), leaf('thar', 'ثار')]),
     feeling('fazi', 'فظيع', [leaf('mushmaizz', 'مشمئز'), leaf('karih', 'كريه')]),
