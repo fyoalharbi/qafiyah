@@ -14,8 +14,11 @@ verses from the catalog that express that precise feeling.
   by its slug. Each entry is a poem slug, its title, poet and era, and the one row shown, with the
   matched word in `<mark>`.
 - `apps/web/src/lib/feelings/upright-layout.ts`: where each feeling sits on screen. Pure: it takes
-  the chosen path and whether the stage is narrow, and returns positions and the view transform.
-- `apps/web/src/components/feelings/`: the island that draws the tree and the result.
+  the chosen path and a wide or narrow tree, and returns positions and the view transform.
+- `apps/web/src/components/feelings/`: the island that draws the tree and the result. It draws the
+  wide and the narrow tree, and a CSS container query shows the one that fits, so the page does
+  not move after it loads. `docs/exceptions.md` ("The `/feelings` tree has its own SVG layout")
+  explains why the layout is custom.
 
 Nothing here touches the database, Elasticsearch, or the API schema. The tree and the verses are
 static data in the web app: they ship with the `/feelings` page's island (about 17 KB gzipped,

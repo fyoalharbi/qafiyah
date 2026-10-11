@@ -810,6 +810,14 @@ Paths are relative to `apps/web/src/` unless they start at the repo root.
 - **Normal approach:** let the integration inject the tags, on a site that does not cache its HTML.
 - **Date:** 2026-10-08
 
+### The `/feelings` tree has its own SVG layout
+
+- **What:** `layoutUpright` places each feeling with its own constants, and estimates each label's width from its character count. The labels are SVG `<text role="button">` elements. The page draws a wide tree and a narrow tree, and a CSS container query shows one of them.
+- **Where:** `lib/feelings/upright-layout.ts`, `components/feelings/feeling-explorer.tsx`
+- **Why:** issue #263 asks for a tree that grows up from one question, and CSS cannot draw its curved branches. An SVG `<text>` cannot hold an HTML `<button>`. The server cannot measure text, so the label widths are estimates. The tests check that no label leaves the view box at either width. Both trees are in the HTML because a width chosen in JavaScript after hydration moves the page on phones.
+- **Normal approach:** a row of buttons for each level, laid out by CSS.
+- **Date:** 2026-10-11
+
 ## Search indexer (`apps/search-indexer`)
 
 ### A Compose init job that reindexes only empty aliases
