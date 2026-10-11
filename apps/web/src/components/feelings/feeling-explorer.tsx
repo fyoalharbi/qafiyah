@@ -5,11 +5,11 @@ import { TYPE } from '@/lib/constants/design-tokens';
 import { FEELING_VERSES } from '@/lib/feelings/feeling-verses';
 import {
   FONT_SIZE_BY_DEPTH,
-  NARROW_BELOW_PX,
   STEM_TOP_Y,
   TRUNK_LABEL_Y,
   edgePath,
   layoutUpright,
+  type UprightLayout,
 } from '@/lib/feelings/upright-layout';
 import { cn } from '@/lib/utils';
 
@@ -57,27 +57,116 @@ const onActivate =
     action();
   };
 
+type FeelingTreeProps = {
+  readonly layout: UprightLayout;
+  readonly path: readonly number[];
+  readonly onChoose: (path: readonly number[]) => void;
+  readonly onReset: () => void;
+  readonly className: string;
+};
+
+function FeelingTree({ layout, path, onChoose, onReset, className }: FeelingTreeProps) {
+  const { viewBox } = layout;
+  return (
+    <svg
+      viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
+      direction="rtl"
+      role="group"
+      aria-label="شجرة المشاعر"
+      className={cn('h-auto w-full select-none', className)}
+    >
+      <g
+        style={{
+          transform: layout.transform,
+          transformOrigin: '0 0',
+          transformBox: 'view-box',
+        }}
+        className="motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out"
+      >
+        <path
+          d={`M0 ${STEM_TOP_Y} L0 0`}
+          fill="none"
+          strokeLinecap="round"
+          className="stroke-highlight [stroke-width:2]"
+        />
+        {layout.items.map((item) => (
+          <path
+            key={item.key}
+            d={edgePath(item)}
+            fill="none"
+            pathLength={1}
+            strokeDasharray={1}
+            strokeLinecap="round"
+            style={{ animationDelay: `${item.depth === 1 ? 0 : 120}ms` }}
+            className={cn(
+              'transition-opacity duration-500',
+              'motion-safe:animate-[feeling-draw_600ms_ease-out_backwards]',
+              EDGE_CLASS[statusOf(item.path, path)]
+            )}
+          />
+        ))}
+        {layout.items.map((item) => {
+          const status = statusOf(item.path, path);
+          const choose = () => onChoose(item.path);
+          return (
+            <text
+              key={item.key}
+              x={item.point.x}
+              y={item.point.y}
+              textAnchor="middle"
+              dominantBaseline="central"
+              fontSize={FONT_SIZE_BY_DEPTH[item.depth]}
+              strokeWidth={6}
+              strokeLinejoin="round"
+              role="button"
+              tabIndex={0}
+              aria-pressed={status === 'chosen'}
+              onClick={choose}
+              onKeyDown={onActivate(choose)}
+              style={{
+                paintOrder: 'stroke',
+                animationDelay: `${item.depth === 1 ? 250 : 380}ms`,
+              }}
+              className={cn(
+                'cursor-pointer stroke-surface transition-[opacity,fill] duration-500 outline-none focus-visible:underline',
+                'motion-safe:animate-[feeling-fade_500ms_ease-out_backwards]',
+                LABEL_CLASS[status]
+              )}
+            >
+              {item.name}
+            </text>
+          );
+        })}
+        <text
+          x={0}
+          y={TRUNK_LABEL_Y}
+          textAnchor="middle"
+          dominantBaseline="central"
+          fontSize={TRUNK_FONT_SIZE}
+          role="button"
+          tabIndex={0}
+          aria-label="من جديد"
+          onClick={onReset}
+          onKeyDown={onActivate(onReset)}
+          className="cursor-pointer fill-text-muted outline-none hover:fill-text focus-visible:underline"
+        >
+          {TRUNK_LABEL}
+        </text>
+      </g>
+    </svg>
+  );
+}
+
 export function FeelingExplorer() {
   const [path, setPath] = useState<readonly number[]>([]);
-  const [narrow, setNarrow] = useState(false);
-  const stageRef = useRef<HTMLDivElement>(null);
   const resultRef = useRef<HTMLDivElement>(null);
 
-  const layout = layoutUpright(path, narrow);
-  const chosen = layout.items.filter((item) => startsWith(path, item.path));
+  const wide = layoutUpright(path, false);
+  const narrow = layoutUpright(path, true);
+  const chosen = wide.items.filter((item) => startsWith(path, item.path));
   const names = chosen.map((item) => item.name);
   const isComplete = names.length === 3;
   const verses = isComplete ? (FEELING_VERSES[chosen.at(-1)?.slug ?? ''] ?? []) : [];
-
-  useEffect(() => {
-    const stage = stageRef.current;
-    if (stage === null) return undefined;
-    const observer = new ResizeObserver(([entry]) => {
-      if (entry !== undefined) setNarrow(entry.contentRect.width < NARROW_BELOW_PX);
-    });
-    observer.observe(stage);
-    return () => observer.disconnect();
-  }, []);
 
   useEffect(() => {
     if (!isComplete) return;
@@ -89,97 +178,24 @@ export function FeelingExplorer() {
   }, [isComplete]);
 
   const reset = () => setPath([]);
-  const { viewBox } = layout;
 
   return (
     <div className="flex flex-col gap-8">
-      <div ref={stageRef}>
-        <svg
-          viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
-          direction="rtl"
-          role="group"
-          aria-label="شجرة المشاعر"
-          className="h-auto w-full select-none"
-        >
-          <g
-            style={{
-              transform: layout.transform,
-              transformOrigin: '0 0',
-              transformBox: 'view-box',
-            }}
-            className="motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out"
-          >
-            <path
-              d={`M0 ${STEM_TOP_Y} L0 0`}
-              fill="none"
-              strokeLinecap="round"
-              className="stroke-highlight [stroke-width:2]"
-            />
-            {layout.items.map((item) => (
-              <path
-                key={item.key}
-                d={edgePath(item)}
-                fill="none"
-                pathLength={1}
-                strokeDasharray={1}
-                strokeLinecap="round"
-                style={{ animationDelay: `${item.depth === 1 ? 0 : 120}ms` }}
-                className={cn(
-                  'transition-opacity duration-500',
-                  'motion-safe:animate-[feeling-draw_600ms_ease-out_backwards]',
-                  EDGE_CLASS[statusOf(item.path, path)]
-                )}
-              />
-            ))}
-            {layout.items.map((item) => {
-              const status = statusOf(item.path, path);
-              const choose = () => setPath(item.path);
-              return (
-                <text
-                  key={item.key}
-                  x={item.point.x}
-                  y={item.point.y}
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fontSize={FONT_SIZE_BY_DEPTH[item.depth]}
-                  strokeWidth={6}
-                  strokeLinejoin="round"
-                  role="button"
-                  tabIndex={0}
-                  aria-pressed={status === 'chosen'}
-                  onClick={choose}
-                  onKeyDown={onActivate(choose)}
-                  style={{
-                    paintOrder: 'stroke',
-                    animationDelay: `${item.depth === 1 ? 250 : 380}ms`,
-                  }}
-                  className={cn(
-                    'cursor-pointer stroke-surface transition-[opacity,fill] duration-500 outline-none focus-visible:underline',
-                    'motion-safe:animate-[feeling-fade_500ms_ease-out_backwards]',
-                    LABEL_CLASS[status]
-                  )}
-                >
-                  {item.name}
-                </text>
-              );
-            })}
-            <text
-              x={0}
-              y={TRUNK_LABEL_Y}
-              textAnchor="middle"
-              dominantBaseline="central"
-              fontSize={TRUNK_FONT_SIZE}
-              role="button"
-              tabIndex={0}
-              aria-label="من جديد"
-              onClick={reset}
-              onKeyDown={onActivate(reset)}
-              className="cursor-pointer fill-text-muted outline-none hover:fill-text focus-visible:underline"
-            >
-              {TRUNK_LABEL}
-            </text>
-          </g>
-        </svg>
+      <div className="@container">
+        <FeelingTree
+          layout={wide}
+          path={path}
+          onChoose={setPath}
+          onReset={reset}
+          className="hidden @min-[560px]:block"
+        />
+        <FeelingTree
+          layout={narrow}
+          path={path}
+          onChoose={setPath}
+          onReset={reset}
+          className="@min-[560px]:hidden"
+        />
       </div>
 
       {isComplete && (

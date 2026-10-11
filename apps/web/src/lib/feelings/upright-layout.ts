@@ -2,7 +2,7 @@ import { FEELING_TREE, type Feeling } from '@/lib/feelings/feeling-tree';
 
 export type Depth = 1 | 2 | 3;
 
-type Point = { readonly x: number; readonly y: number };
+export type Point = { readonly x: number; readonly y: number };
 
 type ViewBox = {
   readonly x: number;
@@ -24,10 +24,10 @@ export type PlacedFeeling = {
 export type UprightLayout = {
   readonly viewBox: ViewBox;
   readonly items: readonly PlacedFeeling[];
+  readonly scale: number;
+  readonly center: Point;
   readonly transform: string;
 };
-
-export const NARROW_BELOW_PX = 560;
 
 export const FONT_SIZE_BY_DEPTH = { 1: 26, 2: 22, 3: 21 } as const satisfies Record<Depth, number>;
 
@@ -67,7 +67,10 @@ function rowPositionsRightToLeft(
   return Array.from({ length: count }, (_, index) => round(start + step * (count - 1 - index)));
 }
 
-function fitTransform(viewBox: ViewBox, points: readonly Point[]): string {
+function fit(
+  viewBox: ViewBox,
+  points: readonly Point[]
+): Pick<UprightLayout, 'scale' | 'center' | 'transform'> {
   const xs = points.map((point) => point.x);
   const ys = points.map((point) => point.y);
   const [minX, maxX, minY, maxY] = [
@@ -81,9 +84,20 @@ function fitTransform(viewBox: ViewBox, points: readonly Point[]): string {
     (viewBox.w * FIT_MARGIN) / Math.max(1, maxX - minX),
     (viewBox.h * FIT_MARGIN) / Math.max(1, maxY - minY)
   );
-  const centerX = (minX + maxX) / 2;
-  const centerY = (minY + maxY) / 2;
-  return `translate(${viewBox.x + viewBox.w / 2}px, ${viewBox.y + viewBox.h / 2}px) scale(${scale}) translate(${-centerX}px, ${-centerY}px)`;
+  const center = { x: (minX + maxX) / 2, y: (minY + maxY) / 2 };
+  return {
+    scale,
+    center,
+    transform: `translate(${viewBox.x + viewBox.w / 2}px, ${viewBox.y + viewBox.h / 2}px) scale(${scale}) translate(${-center.x}px, ${-center.y}px)`,
+  };
+}
+
+export function labelBox({ name, depth, point }: PlacedFeeling): readonly [Point, Point] {
+  const half = (name.length * FONT_SIZE_BY_DEPTH[depth] * GLYPH_WIDTH_RATIO) / 2;
+  return [
+    { x: point.x - half, y: point.y - FONT_SIZE_BY_DEPTH[depth] },
+    { x: point.x + half, y: point.y + FONT_SIZE_BY_DEPTH[depth] },
+  ];
 }
 
 const flip = (point: Point): Point => ({ x: point.x, y: -point.y });
@@ -111,7 +125,6 @@ export function layoutUpright(path: readonly number[], narrow: boolean): Upright
     });
   };
 
-  // Right-to-left: the first core feeling sits on the right.
   rowPositionsRightToLeft(FEELING_TREE.length, 0, step[1], xMax).forEach((x, i) => {
     const core = FEELING_TREE[i];
     if (core === undefined) return;
@@ -149,14 +162,8 @@ export function layoutUpright(path: readonly number[], narrow: boolean): Upright
     });
   });
 
-  const bounds = items.flatMap(({ name, depth, point }) => {
-    const half = (name.length * FONT_SIZE_BY_DEPTH[depth] * GLYPH_WIDTH_RATIO) / 2;
-    return [
-      { x: point.x - half, y: point.y - FONT_SIZE_BY_DEPTH[depth] },
-      { x: point.x + half, y: point.y + FONT_SIZE_BY_DEPTH[depth] },
-    ];
-  });
-  return { viewBox, items, transform: fitTransform(viewBox, [...TRUNK_BOUNDS, ...bounds]) };
+  const bounds = items.flatMap((item) => labelBox(item));
+  return { viewBox, items, ...fit(viewBox, [...TRUNK_BOUNDS, ...bounds]) };
 }
 
 export function edgePath({ from, point }: PlacedFeeling): string {
