@@ -28,7 +28,7 @@ export const FEELING_TREE = [
   feeling('alghadab', 'الغضب', [
     feeling('khidhlan', 'خذلان', [leaf('khiyana', 'خيانة'), leaf('mustaa', 'مستاء')]),
     feeling('idhlal', 'إذلال', [leaf('idtihad', 'اضطهاد'), leaf('sukhriya', 'سخرية')]),
-    feeling('hiqd', 'حقد', [leaf('naqim', 'ناقم'), leaf('intahak', 'انتهك')]),
+    feeling('hiqd', 'حقد', [leaf('naqim', 'ناقم'), leaf('muntahak', 'منتهَك')]),
     feeling('ghadib', 'غاضب', [leaf('ghadban', 'غضبان'), leaf('ghayur', 'غيور')]),
     feeling('udwaniya', 'عدوانية', [leaf('istifzaz', 'استفزاز'), leaf('sharasa', 'شراسة')]),
     feeling('ihbat', 'إحباط', [leaf('munzaij', 'منزعج')]),
@@ -37,12 +37,12 @@ export const FEELING_TREE = [
   ]),
   feeling('alishmizaz', 'الاشمئزاز', [
     feeling('rafid', 'رافض', [leaf('naqid', 'ناقد')]),
-    feeling('khaibalamal', 'خائب الأمل', [leaf('murawwa', 'مروع'), leaf('thar', 'ثار')]),
+    feeling('khaibalamal', 'خائب الأمل', [leaf('murawwa', 'مروع'), leaf('mutaqazziz', 'متقزِّز')]),
     feeling('fazi', 'فظيع', [leaf('mushmaizz', 'مشمئز'), leaf('karih', 'كريه')]),
     feeling('nufur', 'نفور', [leaf('hala', 'هلع'), leaf('mutaraddid', 'متردد')]),
   ]),
   feeling('alhuzn', 'الحزن', [
-    feeling('majruh', 'مجروح', [leaf('munharij', 'منحرج'), leaf('mukhayyab', 'مخيب')]),
+    feeling('majruh', 'مجروح', [leaf('muhraj', 'محرَج'), leaf('mukhayyab', 'مخيب')]),
     feeling('iktiab', 'اكتئاب', [
       leaf('munkasir', 'منكسر'),
       leaf('khaliminalmashair', 'خالي من المشاعر'),
@@ -53,7 +53,7 @@ export const FEELING_TREE = [
     feeling('wahid', 'وحيد', [leaf('takhallaanhu', 'تخلى عنه'), leaf('mazul', 'معزول')]),
   ]),
   feeling('alsaada', 'السعادة', [
-    feeling('marah', 'مرح', [leaf('thair', 'ثائر'), leaf('mushakis', 'مشاكس')]),
+    feeling('marah', 'مرح', [leaf('jadhlan', 'جذلان'), leaf('mushakis', 'مشاكس')]),
     feeling('qanu', 'قنوع', [leaf('hurr', 'حر'), leaf('mubtahij', 'مبتهج')]),
     feeling('muhtamm', 'مهتم', [leaf('fuduli', 'فضولي'), leaf('mutasail', 'متسائل')]),
     feeling('fakhur', 'فخور', [leaf('najih', 'ناجح')]),

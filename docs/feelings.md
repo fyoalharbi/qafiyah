@@ -37,6 +37,10 @@ kept per feeling.
 A feeling whose word kept returning another sense was renamed to a word for the same feeling that
 the catalog uses in that sense: لبس → التباس، متدني → منكسر، عديم الأهمية → مهمَّش، and so on.
 
+Review replaced four words that were verbs, rare, or out of place under their parent: انتهك → منتهَك،
+ثار → متقزِّز، منحرج → محرَج، ثائر → جذلان. Their verses were searched again in the same way. The
+catalog has only two verses with متقزِّز.
+
 ## Limitations
 
 - **Verses are found by word, not by meaning.** A verse is a candidate only if it contains the
