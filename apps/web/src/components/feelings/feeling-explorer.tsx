@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { FeelingVerseItem } from '@/components/feelings/feeling-verse-item';
+import { IslandErrorBoundary } from '@/components/island-error-boundary';
+import { ErrorState } from '@/components/ui-extended/error-state';
 import { TYPE } from '@/lib/constants/design-tokens';
 import { FEELING_VERSES } from '@/lib/feelings/feeling-verses';
 import {
@@ -99,8 +101,7 @@ function FeelingTree({ layout, path, onChoose, onReset, className }: FeelingTree
             strokeLinecap="round"
             style={{ animationDelay: `${item.depth === 1 ? 0 : 120}ms` }}
             className={cn(
-              'transition-opacity duration-500',
-              'motion-safe:animate-[feeling-draw_600ms_ease-out_backwards]',
+              'transition-opacity duration-500 motion-safe:animate-feeling-draw',
               EDGE_CLASS[statusOf(item.path, path)]
             )}
           />
@@ -129,7 +130,7 @@ function FeelingTree({ layout, path, onChoose, onReset, className }: FeelingTree
               }}
               className={cn(
                 'cursor-pointer stroke-surface transition-[opacity,fill] duration-500 outline-none focus-visible:underline',
-                'motion-safe:animate-[feeling-fade_500ms_ease-out_backwards]',
+                'motion-safe:animate-feeling-fade',
                 LABEL_CLASS[status]
               )}
             >
@@ -157,7 +158,7 @@ function FeelingTree({ layout, path, onChoose, onReset, className }: FeelingTree
   );
 }
 
-export function FeelingExplorer() {
+function FeelingPicker() {
   const [path, setPath] = useState<readonly number[]>([]);
   const resultRef = useRef<HTMLDivElement>(null);
 
@@ -166,16 +167,17 @@ export function FeelingExplorer() {
   const chosen = wide.items.filter((item) => startsWith(path, item.path));
   const names = chosen.map((item) => item.name);
   const isComplete = names.length === 3;
-  const verses = isComplete ? (FEELING_VERSES[chosen.at(-1)?.slug ?? ''] ?? []) : [];
+  const preciseSlug = isComplete ? (chosen.at(-1)?.slug ?? '') : '';
+  const verses = FEELING_VERSES[preciseSlug] ?? [];
 
   useEffect(() => {
-    if (!isComplete) return;
+    if (preciseSlug === '') return;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     resultRef.current?.scrollIntoView({
       behavior: reduceMotion ? 'auto' : 'smooth',
       block: 'nearest',
     });
-  }, [isComplete]);
+  }, [preciseSlug]);
 
   const reset = () => setPath([]);
 
@@ -198,38 +200,51 @@ export function FeelingExplorer() {
         />
       </div>
 
-      {isComplete && (
-        <div
-          ref={resultRef}
-          className="flex flex-col gap-3 border-t border-border pt-8 motion-safe:animate-[feeling-fade_400ms_ease-out_backwards]"
-        >
-          <p className={cn(TYPE.caption, 'text-text-subtle')}>{names.join(' ← ')}</p>
-          <p className={cn(TYPE.heading, 'text-highlight')}>{names.at(-1)}</p>
-          {verses.length > 0 ? (
-            <ul className="flex flex-col">
-              {verses.map((verse) => (
-                <FeelingVerseItem key={`${verse.poem}:${verse.row}`} verse={verse} />
-              ))}
-            </ul>
-          ) : (
-            <p className={cn(TYPE.body, 'text-text-muted')}>لم نجد لهذا الشعور أبياتًا بعد.</p>
-          )}
-          <p className={cn(TYPE.caption, 'text-text-subtle')}>
-            اختيرت هذه الأبيات من نتائج البحث عن الكلمة نفسها، لا عن معناها، فقد تفوتها أبيات تعبّر عن
-            الشعور بألفاظ أخرى.
-          </p>
-          <button
-            type="button"
-            onClick={reset}
-            className={cn(
-              TYPE.body,
-              'self-start rounded-sm text-text-muted underline underline-offset-4 focus-ring hover:text-text'
-            )}
+      <div ref={resultRef} aria-live="polite">
+        {isComplete && (
+          <div
+            key={preciseSlug}
+            className="flex flex-col gap-3 border-t border-border pt-8 motion-safe:animate-feeling-fade"
           >
-            من جديد
-          </button>
-        </div>
-      )}
+            <p className={cn(TYPE.caption, 'text-text-subtle')}>{names.join(' ← ')}</p>
+            <p className={cn(TYPE.heading, 'text-highlight')}>{names.at(-1)}</p>
+            {verses.length > 0 ? (
+              <ul className="flex flex-col">
+                {verses.map((verse) => (
+                  <FeelingVerseItem key={`${verse.poem}:${verse.row}`} verse={verse} />
+                ))}
+              </ul>
+            ) : (
+              <p className={cn(TYPE.body, 'text-text-muted')}>لم نجد لهذا الشعور أبياتًا بعد.</p>
+            )}
+            <p className={cn(TYPE.caption, 'text-text-subtle')}>
+              اختيرت هذه الأبيات من نتائج البحث عن الكلمة نفسها، لا عن معناها، فقد تفوتها أبيات تعبّر
+              عن الشعور بألفاظ أخرى.
+            </p>
+            <button
+              type="button"
+              onClick={reset}
+              className={cn(
+                TYPE.body,
+                'self-start rounded-sm text-text-muted underline underline-offset-4 focus-ring hover:text-text'
+              )}
+            >
+              من جديد
+            </button>
+          </div>
+        )}
+      </div>
     </div>
+  );
+}
+
+export function FeelingExplorer() {
+  return (
+    <IslandErrorBoundary
+      feature="feelings"
+      fallback={<ErrorState onRetry={() => window.location.reload()} />}
+    >
+      <FeelingPicker />
+    </IslandErrorBoundary>
   );
 }

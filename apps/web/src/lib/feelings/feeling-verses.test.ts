@@ -19,6 +19,13 @@ describe('FEELING_VERSES', () => {
     expect(LEAVES.filter((slug) => (FEELING_VERSES[slug] ?? []).length === 0)).toEqual([]);
   });
 
+  it('names the title, poet, and era of every verse, as the catalog does', () => {
+    const unnamed = Object.values(FEELING_VERSES)
+      .flat()
+      .filter((verse) => [verse.title, verse.poet, verse.era].some((value) => value.trim() === ''));
+    expect(unnamed).toEqual([]);
+  });
+
   it('marks the matched word in every verse, since the quiz matches by word', () => {
     const unmarked = Object.values(FEELING_VERSES)
       .flat()

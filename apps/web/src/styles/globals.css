@@ -67,6 +67,21 @@
   --radius-md: 6px;
   --radius-lg: 12px;
 
+  --animate-feeling-draw: feeling-draw 600ms ease-out backwards;
+  --animate-feeling-fade: feeling-fade 500ms ease-out backwards;
+
+  @keyframes feeling-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+  }
+
+  @keyframes feeling-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
   --color-surface: var(--surface);
   --color-surface-raised: var(--surface-raised);
   --color-surface-sunken: var(--surface-sunken);
