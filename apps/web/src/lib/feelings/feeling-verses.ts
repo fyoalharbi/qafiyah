@@ -150,7 +150,7 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
       poem: 'lxXA',
       title: 'هذا المسا شوقي و عطرك و الأنفاس',
       poet: 'فيصل فهد العنزي',
-      era: 'غير معروف',
+      era: 'حديث',
       row: 'جيتك غريب و <mark>فاقد إحساس</mark> بالناس*جيتك و.. عمري ضايع .. من يديني',
     },
   ],
@@ -193,11 +193,11 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
       row: 'خليني <mark>غضبان</mark>',
     },
     {
-      poem: 'QuER',
+      poem: 'Xbpc',
       title: 'أما تغضب العلياء أني غضبان',
       poet: 'القاضي الفاضل',
       era: 'أيوبي',
-      row: 'أَما تَغضَبُ العَلياءُ أَنِّيَ <mark>غَضبانُ</mark>*وأَنّي نَزيلٌ لِلصَباحِ وَحائِرٌ',
+      row: 'أَما تَغضَبُ العَلياءُ أَنِّيَ <mark>غَضبانُ</mark>',
     },
   ],
   ghayrkafi: [
@@ -211,8 +211,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'WxYO',
       title: 'عندك كوم جمائل وللمكارم جامعه',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'عبد الرحمن الزبير الكاهلي',
+      era: 'حديث',
       row: 'بغني عليك إلا يا ست السماح عوافي*قاصر حرفي لوصفك بكون <mark>غير كافي</mark>',
     },
   ],
@@ -273,8 +273,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'RbRu',
       title: 'ضعيف أنا هش وكسلى خيولي',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'جوزيف إيليا',
+      era: 'حديث',
       row: 'ضعيفٌ أنا <mark>هشٌّ</mark> وكسلى خيولي*وخافتةُ الإيقاعِ كلُّ طبولي',
     },
   ],
@@ -358,8 +358,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'pzfC',
       title: 'في ملتقى للموهبه',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'إبراهيم أبو طالب',
+      era: 'حديث',
       row: 'حَقَّقتُ <mark>إبداعي</mark> هُنا*ورسمتُ لوحاتِ الهَنا',
     },
     {
@@ -512,8 +512,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'jqjp',
       title: 'وما كنت من أهل العداء لكن',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'محمد أقنين بن غراب',
+      era: 'حديث',
       row: 'وَمَا كُنتُ مِن أَهلِ العَدَاءِ لَكِن*قَادَنِي <mark>استِفزَازٌ</mark> إِلَى خَوضِ عَيبٍ',
     },
     {
@@ -558,8 +558,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'KkMb',
       title: 'بعوضة لا ترى بالعين تصفعني',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'ابن مجدي',
+      era: 'حديث',
       row: 'لها طنينٌ <mark>كريهُ</mark> الصوتِ يفجعني*فجعَ الثكالى على المحبوبِ والولدِ',
     },
     {
@@ -749,8 +749,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
       row: 'النورُ منتشرٌ والكونُ مبتسمٌ*والكلُ <mark>مبتهجٌ</mark> في حضرةِ النورِ',
     },
     {
-      poem: 'DuNg',
-      title: 'قضى الذي كان ناديه ومحضره',
+      poem: 'JMwB',
+      title: 'لينتشر بعد طي ذلك العلم',
       poet: 'خليل مطران',
       era: 'حديث',
       row: 'دُرٌّ يُسَلْسِلُهُ فِيمَا يَفُوهُ بِهِ*فَالْقَلْبُ <mark>مُبْتَهِجٌ</mark> وَالْعَقْلُ مُغْتَنِمُ',
@@ -813,7 +813,7 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'adGF',
       title: 'من غربة الدار حتى غربة السفر',
-      poet: 'غير معروف',
+      poet: 'عبد الله حديب',
       era: 'غير معروف',
       row: 'مِنْ غُرْبَةِ الدَّارِ حَتَّى غُرْبَةِ السَّفَرِ*<mark>مُهَمَّشٌ</mark>، لا يُوَاسِينِي سِوَى مَطَرِي',
     },
@@ -896,10 +896,10 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
   ],
   mukarram: [
     {
-      poem: 'SlxQ',
-      title: 'إني امرؤ مكرم نفسي ومتئد',
-      poet: 'مجهول (عباسي)',
-      era: 'عباسي',
+      poem: 'PURa',
+      title: 'يا أيها الراكبان السائران معا',
+      poet: 'بعض بني فقعس',
+      era: 'جاهلي',
       row: 'إِنِّي امْرُؤٌ <mark>مُكْرِمٌ</mark> نَفْسِي وَمُتَّئِدٌ*مِنْ أَنْ أُقَاذِعَهَا حَتَّى أُجَازِيهَا',
     },
     {
@@ -912,8 +912,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'ZQRr',
       title: 'أحب إلى الحر الطوى وهو مكرم',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'هجائي البصري',
+      era: 'حديث',
       row: 'أَحَبُّ إلى الحرِّ الطوى وهو <mark>مكرمٌ</mark>*يبيتُ ولم يَمنُن على النفسِ إنسانُ',
     },
   ],
@@ -958,8 +958,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'sBtP',
       title: 'لحبك في قلبي وراثة ملهم',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'محمد ياسين صالح',
+      era: 'حديث',
       row: 'لِحُبِّكِ فِي قَلْبِي وِرَاثَةُ <mark>مُلْهَمُ</mark>*تَنَاسَتْهُ أَرْوَاحُ السَّمَاءِ وَأَنْجُمُ',
     },
   ],
@@ -974,15 +974,15 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'yJjL',
       title: 'أبلغ سرارة أن القلب منكسر',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'محمد ياسين صالح',
+      era: 'حديث',
       row: 'أَبْلِغْ سُرَارَةَ أَنَّ الْقَلْبَ <mark>مُنْكَسِرُ</mark>*وَأَنَّ بُعْدَكِ نَارٌ لَيْسَ يَحْتَمِرُ',
     },
     {
       poem: 'gJaq',
       title: 'يا ترى كم سأنتظر',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'جوزيف إيليا',
+      era: 'حديث',
       row: 'هاتفيني فإنّني*مِنْ جوى الشّوقِ <mark>منكسِرْ</mark>',
     },
   ],
@@ -1004,8 +1004,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'cPkS',
       title: 'كان الفراق بلا وعد ولا سبب',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'نجلاء فتحي كريشة',
+      era: 'حديث',
       row: 'لَمْ نَحْكِ شَيْئًا، وَلَمْ نَبْكِي بِحُرْقَتِنَا*بَلْ كَانَ صَمْتًا بَعِيدًا مِثْلَ <mark>مُنْسَحِبِ</mark>',
     },
   ],
@@ -1036,8 +1036,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'rVNq',
       title: 'مكتئب منزعج قلق',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'جوزيف إيليا',
+      era: 'حديث',
       row: 'مكتئبٌ <mark>منزعجٌ</mark> قلِقُ*وغاضبٌ ينهشُني أرقُ',
     },
     {
@@ -1133,11 +1133,11 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
       row: 'فَقُلتُ.. بين مُشفِقٍ وبين <mark>مُشمَئِزِّ</mark>:*أُهَنِّئُ البِلادَ بِالسُّقُوطِ؟ أَم أُعَزِّي؟!',
     },
     {
-      poem: 'ROAR',
-      title: 'شادن كالقضيب لدن المهزه',
+      poem: 'THmm',
+      title: 'كتب العذار على الخدود سطورا',
       poet: 'عماد الدين الأصبهاني',
       era: 'أيوبي',
-      row: 'همة مستهامة بالمعالي*للدنايا أبية <mark>مشمئزه</mark>',
+      row: 'همةٌ مستهامة بالمعالي*للدنايا أَبيةٌ <mark>مُشْمئزهْ</mark>',
     },
   ],
   mustaa: [
@@ -1176,8 +1176,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'dKVP',
       title: 'أدرى الحبيب بأنني متلهف',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'جنات نواف الشلالفة',
+      era: 'حديث',
       row: 'أدرى الحبيبُ بأنّني <mark>متلهِّفٌ</mark>*وَجْدي يُذيبُ الصخرَ لو يتكلَّمُ',
     },
     {
@@ -1222,8 +1222,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'mWbD',
       title: 'إن الكلام على فمي يتجمد',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'جوزيف إيليا',
+      era: 'حديث',
       row: 'إنَّ الكلامَ على فمي يتجمّدُ*فأنا ضعيفٌ حائرٌ <mark>متردِّدُ</mark>',
     },
     {
@@ -1353,8 +1353,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'YPxD',
       title: 'دانتي قلها إني ناجح',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'جوزيف إيليا',
+      era: 'حديث',
       row: 'دانتي قلْها : إنّي <mark>ناجحْ</mark>*وسأبقى في الدّنيا طامحْ',
     },
     {
@@ -1392,8 +1392,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'lsFu',
       title: 'على طول دهري ناقم وغضوب',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'محمد الشمري',
+      era: 'حديث',
       row: 'على طول دهري <mark>ناقمٌ</mark> وغضوبُ*ولكنَّ أعقاب الشبابِ مشيبُ',
     },
     {
@@ -1502,8 +1502,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'Qfhs',
       title: 'منذ افترقنا تصدع الوقت جروحا',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'محمد عسران',
+      era: 'حديث',
       row: 'وَالنَّاسُ يَهْتِفُونَ <mark>سُخْرِيَّةً</mark> بِآلَامِي.',
     },
     {
@@ -1562,8 +1562,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'QOss',
       title: 'رافقني الحزن احتضنني',
-      poet: 'غير معروف',
-      era: 'غير معروف',
+      poet: 'مثنى يوسف مهدي',
+      era: 'حديث',
       row: 'لَقَدْ <mark>تَخَلَّى عَنِّي</mark> الْكُلُّ،',
     },
   ],
@@ -1579,7 +1579,7 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
       poem: 'cRDM',
       title: 'ضحاله بالفكر والطرح مزري والنقاش أضحل',
       poet: 'مطلق النومسي',
-      era: 'غير معروف',
+      era: 'حديث',
       row: 'وتركني بين <mark>تأنيب</mark> الضمير ... وجرحي المبحل*ودورات الزمن .. حسب الخطوط الإستوائية',
     },
     {
@@ -1617,8 +1617,8 @@ export const FEELING_VERSES: Readonly<Record<string, readonly FeelingVerse[]>> =
     {
       poem: 'VzxX',
       title: 'قلبي طروب واللسان ودود',
-      poet: 'حسن حسني الطويراني',
-      era: 'حديث',
+      poet: 'ابن زريق البغدادي',
+      era: 'عباسي',
       row: 'قَلبي طروب وَاللسان <mark>وَدودُ</mark>*يُبدي السَلام إِليكُمُ وَيُعيدُ',
     },
     {
