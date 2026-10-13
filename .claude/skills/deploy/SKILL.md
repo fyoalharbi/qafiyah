@@ -81,10 +81,11 @@ It needs the newest dump's `DUMP_KEY__<dir>` in `secrets/prod.enc.env`, and refu
 
 **For a new dump together with code changes**, do these steps in this order:
 
-1. Release the version that holds the snapshot and the code into `main` (step 0), and let CI pass.
-2. Run `bun run db:reseed`. Between the swap and the end of its API rollout (about 30 seconds), the old API serves the new data. If the old API cannot read the new schema, its queries fail for those seconds.
-3. Run `bun run deploy` to roll out `web`. It also replaces `api` with the same build. No separate reindex is necessary, because the reseed already rebuilt search with the new indexer.
-4. Verify with `bun run api:conformance prod`. The home page's search filters read their options and counts from the API, so they follow the new dump automatically.
+1. Run `bun run corpus:check-feelings` on the new dump, and update each verse that it prints in `apps/web/src/lib/feelings/feeling-verses.ts` (`docs/feelings.md`).
+2. Release the version that holds the snapshot and the code into `main` (step 0), and let CI pass.
+3. Run `bun run db:reseed`. Between the swap and the end of its API rollout (about 30 seconds), the old API serves the new data. If the old API cannot read the new schema, its queries fail for those seconds.
+4. Run `bun run deploy` to roll out `web`. It also replaces `api` with the same build. No separate reindex is necessary, because the reseed already rebuilt search with the new indexer.
+5. Verify with `bun run api:conformance prod`. The home page's search filters read their options and counts from the API, so they follow the new dump automatically.
 
 ## 4. Rebuild only the search index (fix Elasticsearch differences, no data change)
 
