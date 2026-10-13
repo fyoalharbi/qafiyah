@@ -707,6 +707,15 @@ Paths are relative to `apps/web/src/` unless they start at the repo root.
 - **Normal approach:** render the control on the client after fetching the session.
 - **Date:** 2026-09-23
 
+### The footer leaves room for X's toolbar only inside X's in-app browser
+
+- **What:** `in-app-browser-init.astro` sets `data-in-app-browser="x"` on `<html>`, before the first paint, when the user agent contains `Twitter for iPhone`. The footer then adds 56px of bottom padding (`in-data-[in-app-browser=x]:pb-14`). Every other browser gets the plain footer.
+- **Where:** `components/layout/in-app-browser-init.astro`, `lib/in-app-browser.ts`, `components/footer.tsx`
+- **Why:** X's in-app browser on iPhone floats its toolbar over the bottom 64pt of the page, and it does not report the toolbar through `env(safe-area-inset-bottom)`. So the toolbar covers the footer links, and no browser API tells the page. Pages are cached by path, so the server cannot vary the HTML by user agent.
+  - X's in-app browser on Android (`TwitterAndroid`) is left out until someone checks whether its toolbar covers the page.
+- **Normal approach:** pad the footer with `env(safe-area-inset-bottom)`, or give every browser the same padding.
+- **Date:** 2026-10-13
+
 ### A custom layout debugger (dev only)
 
 - **What:** `layout-debug.astro` outlines and tints every wrapper with a unique color and a `D<n>` label on an overlay layer that never touches the page's own elements.
