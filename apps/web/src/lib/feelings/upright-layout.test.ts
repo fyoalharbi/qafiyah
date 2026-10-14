@@ -12,7 +12,7 @@ const SEED = readFileSync(
 );
 const SEED_ROWS = [...SEED.matchAll(/\((\d+), (NULL|\d+), '([^']+)', '([^']+)', '[^']*', \d+\)/gu)];
 const SLUG_BY_ID = new Map(SEED_ROWS.map((m) => [m[1], m[3] ?? '']));
-const FEELING_TREE = buildFeelingTree(
+const SEED_TREE = buildFeelingTree(
   SEED_ROWS.map((m) => ({
     slug: m[3] ?? '',
     name: m[4] ?? '',
@@ -23,7 +23,7 @@ const FEELING_TREE = buildFeelingTree(
 
 const PATHS: readonly (readonly number[])[] = [
   [],
-  ...FEELING_TREE.flatMap((core, i) => [
+  ...SEED_TREE.flatMap((core, i) => [
     [i],
     ...core.children.flatMap((sub, j) => [[i, j], ...sub.children.map((_, k) => [i, j, k])]),
   ]),
@@ -61,7 +61,7 @@ describe('layoutUpright', () => {
 
   it.each(WIDTHS)('keeps every label inside the view box of the $name tree', ({ narrow }) => {
     const escaped = PATHS.flatMap((path) =>
-      outside(layoutUpright(FEELING_TREE, path, narrow)).map((name) => `${path.join('-')}: ${name}`)
+      outside(layoutUpright(SEED_TREE, path, narrow)).map((name) => `${path.join('-')}: ${name}`)
     );
     expect(escaped).toEqual([]);
   });
@@ -69,14 +69,14 @@ describe('layoutUpright', () => {
   it('places the same feelings in the wide and the narrow tree, so CSS can show either', () => {
     const differ = PATHS.filter((path) => {
       const keys = (narrow: boolean) =>
-        layoutUpright(FEELING_TREE, path, narrow).items.map((item) => item.key);
+        layoutUpright(SEED_TREE, path, narrow).items.map((item) => item.key);
       return keys(false).join() !== keys(true).join();
     });
     expect(differ).toEqual([]);
   });
 
   it.each(WIDTHS)('places the first core feeling on the right of the $name tree', ({ narrow }) => {
-    const xs = layoutUpright(FEELING_TREE, [], narrow).items.map((item) => item.point.x);
+    const xs = layoutUpright(SEED_TREE, [], narrow).items.map((item) => item.point.x);
     expect(xs[0]).toBe(Math.max(...xs));
   });
 });

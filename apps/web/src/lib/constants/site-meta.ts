@@ -53,6 +53,7 @@ export const NAV_LINKS = [
   { name: 'القوافي', href: '/rhymes', isExternal: false },
   { name: 'الأغراض', href: '/themes', isExternal: false },
   { name: 'الدواوين', href: '/collections', isExternal: false },
+  { name: 'المشاعر', href: '/feelings', isExternal: false },
 ] as const satisfies readonly NavLink[];
 
 export const TWITTER_HANDLE = '@qafiyahx';

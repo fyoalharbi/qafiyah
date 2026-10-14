@@ -1,8 +1,9 @@
 import { SITE_URL } from '@/lib/constants/config';
 import { loadTaxonomyIndex } from '@/lib/seo/taxonomy-pages';
 import { CACHE_SITEMAP } from '@/lib/server/cache';
+import { allFeelings } from '@/lib/server/feelings';
 import { urlsetXml } from '@/lib/server/sitemap';
-import { taxonomyIndexUrl, taxonomyUrl, type TaxonomySection } from '@/lib/urls';
+import { feelingUrl, taxonomyIndexUrl, taxonomyUrl, type TaxonomySection } from '@/lib/urls';
 
 import type { APIRoute } from 'astro';
 
@@ -18,7 +19,12 @@ export const GET: APIRoute = async () => {
       ];
     })
   );
-  return new Response(urlsetXml(bySection.flat()), {
+  const feelings = await allFeelings();
+  const feelingLocs = [
+    `${SITE_URL}${feelingUrl()}`,
+    ...feelings.map((feeling) => `${SITE_URL}${feelingUrl(feeling.slug)}`),
+  ];
+  return new Response(urlsetXml([...bySection.flat(), ...feelingLocs]), {
     headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': CACHE_SITEMAP },
   });
 };

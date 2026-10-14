@@ -15,7 +15,7 @@ Base URL: {BASE}
 - Every endpoint is GET and returns JSON, except the random poem, which returns plain text.
 - No key is needed. Anonymous callers get 60 requests an hour per address. A free key from {SITE}/developers, sent as the `x-api-key` header, raises this to 500 an hour, at most 10 a second, and at most 1,500 an hour from one address. A key the API does not recognize counts as no key.
 - Responses, errors included, carry `x-ratelimit-limit`, `x-ratelimit-remaining`, and `x-ratelimit-reset` (Unix time in seconds when the window ends). A 429 or 503 carries `Retry-After` in seconds.
-- Poems and poets have four-letter, case-sensitive slugs (`gnNg`, `PAKT`). Eras, meters, rhymes, themes, verse forms, and collections have lowercase transliterated slugs (`jahili`, `altawil`, `meem`, `alhikma`, `amudi`, `almuallaqat`).
+- Poems and poets have four-letter, case-sensitive slugs (`gnNg`, `PAKT`). Eras, meters, rhymes, themes, verse forms, collections, and feelings have lowercase transliterated slugs (`jahili`, `altawil`, `meem`, `alhikma`, `amudi`, `almuallaqat`, `alhuzn`).
 - A list is `{"data": [...], "pagination": {"page", "pageSize", "totalPages", "totalItems"}}` with 1-based pages, and a single item is `{"data": {...}}`.
 - Repeat a filter to match any of its values (`?meter=altawil&meter=alkamil`). Different filters combine with AND. An unknown query param is refused with 400, and every 400 names the parameter at fault.
 - JSON responses carry an `ETag`. Send it back as `If-None-Match` to get a 304.
@@ -52,6 +52,8 @@ Each list returns every term with its counts. Each item takes the term's slug.
 - [GET /v1/themes]({BASE}/themes) and [/v1/themes/{slug}]({BASE}/themes/alhikma): Themes, with poem counts
 - [GET /v1/poem-types]({BASE}/poem-types) and [/v1/poem-types/{slug}]({BASE}/poem-types/amudi): Verse forms (amudi, hurr, and the rest), with poem and poet counts
 - [GET /v1/collections]({BASE}/collections) and [/v1/collections/{slug}]({BASE}/collections/almuallaqat): Curated collections, with poem counts
+- [GET /v1/feelings]({BASE}/feelings) and [/v1/feelings/{slug}]({BASE}/feelings/alhuzn): The Feelings Wheel in Arabic, in tree order, with verse counts
+- [GET /v1/feelings/{slug}/verses]({BASE}/feelings/alhuzn/verses): The classical verses of a feeling and every feeling below it, strongest first, 30 a page. Params: `page`.
 
 ## Links
 
