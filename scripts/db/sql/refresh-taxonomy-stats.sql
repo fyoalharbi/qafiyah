@@ -99,6 +99,11 @@ CREATE TABLE IF NOT EXISTS public.gender_stats (
   poems_count bigint
 );
 
+CREATE TABLE IF NOT EXISTS public.feeling_stats (
+  id integer PRIMARY KEY,
+  verses_count bigint
+);
+
 CREATE UNIQUE INDEX IF NOT EXISTS idx_poet_stats_slug ON public.poet_stats (slug);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_meter_stats_slug ON public.meter_stats (slug);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_rhyme_stats_slug ON public.rhyme_stats (slug);
@@ -122,6 +127,7 @@ BEGIN
   DELETE FROM public.genre_stats;
   DELETE FROM public.nation_stats;
   DELETE FROM public.gender_stats;
+  DELETE FROM public.feeling_stats;
 
   INSERT INTO public.poet_stats (id, name, slug, era_id, poems_count)
   SELECT p.id, p.name, p.slug, p.era_id, count(pm.id)
@@ -198,6 +204,24 @@ BEGIN
   LEFT JOIN public.poets pt ON v.id = pt.gender_id AND NOT pt.is_hidden
   LEFT JOIN public.poems p ON p.poet_id = pt.id AND p.recension_of_id IS NULL AND NOT p.is_hidden
   GROUP BY v.id, v.name, v.slug;
+
+  WITH RECURSIVE branch (root_id, feeling_id) AS (
+    SELECT id, id FROM public.feelings
+    UNION ALL
+    SELECT b.root_id, f.id FROM branch b JOIN public.feelings f ON f.parent_id = b.feeling_id
+  ),
+  shown (root_id, poem_id, position) AS (
+    SELECT DISTINCT b.root_id, fv.poem_id, fv.position
+    FROM branch b
+    JOIN public.feeling_verses fv ON fv.feeling_id = b.feeling_id
+    JOIN public.poems p ON p.id = fv.poem_id AND p.recension_of_id IS NULL AND NOT p.is_hidden
+    JOIN public.poets pt ON pt.id = p.poet_id AND NOT pt.is_hidden
+  )
+  INSERT INTO public.feeling_stats (id, verses_count)
+  SELECT f.id, count(s.poem_id)
+  FROM public.feelings f
+  LEFT JOIN shown s ON s.root_id = f.id
+  GROUP BY f.id;
 
   ANALYZE public.poet_stats;
   ANALYZE public.meter_stats;
