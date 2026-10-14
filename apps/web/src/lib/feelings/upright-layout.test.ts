@@ -1,7 +1,25 @@
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+
 import { describe, expect, it } from 'vitest';
 
-import { FEELING_TREE } from './feeling-tree';
+import { buildFeelingTree } from './feeling-tree';
 import { labelBox, layoutUpright, type Point, type UprightLayout } from './upright-layout';
+
+const SEED = readFileSync(
+  fileURLToPath(new URL('../../../../../scripts/db/sql/feelings.sql', import.meta.url)),
+  'utf8'
+);
+const SEED_ROWS = [...SEED.matchAll(/\((\d+), (NULL|\d+), '([^']+)', '([^']+)', '[^']*', \d+\)/gu)];
+const SLUG_BY_ID = new Map(SEED_ROWS.map((m) => [m[1], m[3] ?? '']));
+const FEELING_TREE = buildFeelingTree(
+  SEED_ROWS.map((m) => ({
+    slug: m[3] ?? '',
+    name: m[4] ?? '',
+    verseCount: 1,
+    ...(m[2] === 'NULL' ? {} : { parentSlug: SLUG_BY_ID.get(m[2] ?? '') ?? '' }),
+  }))
+);
 
 const PATHS: readonly (readonly number[])[] = [
   [],
@@ -37,23 +55,28 @@ const outside = (layout: UprightLayout): readonly string[] =>
     .map((item) => item.name);
 
 describe('layoutUpright', () => {
+  it('reads all 129 feelings from the seed', () => {
+    expect(SEED_ROWS).toHaveLength(129);
+  });
+
   it.each(WIDTHS)('keeps every label inside the view box of the $name tree', ({ narrow }) => {
     const escaped = PATHS.flatMap((path) =>
-      outside(layoutUpright(path, narrow)).map((name) => `${path.join('-')}: ${name}`)
+      outside(layoutUpright(FEELING_TREE, path, narrow)).map((name) => `${path.join('-')}: ${name}`)
     );
     expect(escaped).toEqual([]);
   });
 
   it('places the same feelings in the wide and the narrow tree, so CSS can show either', () => {
     const differ = PATHS.filter((path) => {
-      const keys = (narrow: boolean) => layoutUpright(path, narrow).items.map((item) => item.key);
+      const keys = (narrow: boolean) =>
+        layoutUpright(FEELING_TREE, path, narrow).items.map((item) => item.key);
       return keys(false).join() !== keys(true).join();
     });
     expect(differ).toEqual([]);
   });
 
   it.each(WIDTHS)('places the first core feeling on the right of the $name tree', ({ narrow }) => {
-    const xs = layoutUpright([], narrow).items.map((item) => item.point.x);
+    const xs = layoutUpright(FEELING_TREE, [], narrow).items.map((item) => item.point.x);
     expect(xs[0]).toBe(Math.max(...xs));
   });
 });

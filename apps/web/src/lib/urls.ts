@@ -52,6 +52,10 @@ export function taxonomyUrl(section: TaxonomySection, slug: string, page?: numbe
   return withPage(encodedPath(`/${section}/${slug}`), page);
 }
 
+export function feelingUrl(slug?: string, page?: number): string {
+  return slug === undefined ? '/feelings' : withPage(encodedPath(`/feelings/${slug}`), page);
+}
+
 export function poetsUrl(opts?: {
   page?: number | undefined;
   era?: string | undefined;

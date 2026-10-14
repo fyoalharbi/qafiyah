@@ -1,4 +1,4 @@
-import { FEELING_TREE, type Feeling } from '@/lib/feelings/feeling-tree';
+import type { Feeling } from '@/lib/feelings/feeling-tree';
 
 export type Depth = 1 | 2 | 3;
 
@@ -102,7 +102,11 @@ export function labelBox({ name, depth, point }: PlacedFeeling): readonly [Point
 
 const flip = (point: Point): Point => ({ x: point.x, y: -point.y });
 
-export function layoutUpright(path: readonly number[], narrow: boolean): UprightLayout {
+export function layoutUpright(
+  tree: readonly Feeling[],
+  path: readonly number[],
+  narrow: boolean
+): UprightLayout {
   const viewBox = narrow ? VIEW_BOX.narrow : VIEW_BOX.wide;
   const xMax = narrow ? 300 : 440;
   const step = narrow ? { 1: 66, 2: 58, 3: 70 } : { 1: 128, 2: 118, 3: 128 };
@@ -125,8 +129,8 @@ export function layoutUpright(path: readonly number[], narrow: boolean): Upright
     });
   };
 
-  rowPositionsRightToLeft(FEELING_TREE.length, 0, step[1], xMax).forEach((x, i) => {
-    const core = FEELING_TREE[i];
+  rowPositionsRightToLeft(tree.length, 0, step[1], xMax).forEach((x, i) => {
+    const core = tree[i];
     if (core === undefined) return;
     const corePoint = {
       x,

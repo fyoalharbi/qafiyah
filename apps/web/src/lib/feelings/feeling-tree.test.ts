@@ -1,37 +1,35 @@
 import { describe, expect, it } from 'vitest';
 
-import { FEELING_TREE, type Feeling } from './feeling-tree';
+import { buildFeelingTree, pathOf } from './feeling-tree';
 
-type Entry = { readonly feeling: Feeling; readonly depth: number };
+const row = (slug: string, parentSlug?: string, verseCount = 1) => ({
+  slug,
+  name: `ال${slug}`,
+  verseCount,
+  ...(parentSlug ? { parentSlug } : {}),
+});
 
-const flatten = (feelings: readonly Feeling[], depth = 1): readonly Entry[] =>
-  feelings.flatMap((feeling) => [{ feeling, depth }, ...flatten(feeling.children, depth + 1)]);
+const ROWS = [
+  row('sad', undefined, 5),
+  row('lonely', 'sad', 3),
+  row('isolated', 'lonely'),
+  row('happy'),
+];
 
-const ENTRIES = flatten(FEELING_TREE);
-
-const duplicatesOf = (values: readonly string[]): readonly string[] =>
-  values.filter((value, index) => values.indexOf(value) !== index);
-
-describe('FEELING_TREE', () => {
-  it('gives every feeling a unique slug, since labels point at slugs', () => {
-    expect(duplicatesOf(ENTRIES.map((entry) => entry.feeling.slug))).toEqual([]);
+describe('buildFeelingTree', () => {
+  it('nests each feeling under its parent in list order', () => {
+    const tree = buildFeelingTree(ROWS);
+    expect(tree.map((core) => core.slug)).toEqual(['sad', 'happy']);
+    expect(tree[0]?.children[0]?.children[0]?.slug).toBe('isolated');
+    expect(tree[0]?.verseCount).toBe(5);
   });
+});
 
-  it('names every feeling once, so no word sits under two branches', () => {
-    expect(duplicatesOf(ENTRIES.map((entry) => entry.feeling.name))).toEqual([]);
-  });
-
-  it('uses lowercase ASCII slugs like the other taxonomies', () => {
-    const invalid = ENTRIES.map((entry) => entry.feeling.slug).filter(
-      (slug) => !/^[a-z]+$/u.test(slug)
-    );
-    expect(invalid).toEqual([]);
-  });
-
-  it('ends every branch at the third level, where the quiz expects a precise feeling', () => {
-    const misplaced = ENTRIES.filter(
-      (entry) => (entry.feeling.children.length === 0) !== (entry.depth === 3)
-    ).map((entry) => entry.feeling.name);
-    expect(misplaced).toEqual([]);
+describe('pathOf', () => {
+  it('gives the index path of a feeling, and null for an unknown slug', () => {
+    const tree = buildFeelingTree(ROWS);
+    expect(pathOf(tree, 'isolated')).toEqual([0, 0, 0]);
+    expect(pathOf(tree, 'happy')).toEqual([1]);
+    expect(pathOf(tree, 'nothing')).toBeNull();
   });
 });
