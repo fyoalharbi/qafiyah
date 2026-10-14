@@ -70,9 +70,13 @@ BEGIN
   WHERE fv.poem_id = p_absorb
     AND absorbed.poem_id = p_absorb
     AND absorbed.position = fv.position
+    AND absorbed.position = (
+      SELECT min(a.position) FROM public.poem_verses a
+      WHERE a.poem_id = p_absorb AND a.verse_id = absorbed.verse_id
+    )
     AND NOT EXISTS (
       SELECT 1 FROM public.feeling_verses taken
-      WHERE taken.poem_id = p_keep AND taken.position = kept.position
+      WHERE taken.poem_id = p_keep AND taken.position = kept.position AND taken.feeling_id = fv.feeling_id
     );
   DELETE FROM public.feeling_verses WHERE poem_id = p_absorb;
   DELETE FROM public.poems WHERE id = p_absorb;

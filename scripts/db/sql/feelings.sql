@@ -11,12 +11,12 @@ CREATE TABLE IF NOT EXISTS public.feeling_verses (
   poem_id integer NOT NULL,
   position integer NOT NULL,
   feeling_id integer NOT NULL REFERENCES public.feelings (id),
-  score real NOT NULL,
-  PRIMARY KEY (poem_id, position),
+  strength smallint NOT NULL CHECK (strength BETWEEN 1 AND 3),
+  PRIMARY KEY (poem_id, position, feeling_id),
   FOREIGN KEY (poem_id, position) REFERENCES public.poem_verses (poem_id, position) ON UPDATE CASCADE
 );
 
-CREATE INDEX IF NOT EXISTS idx_feeling_verses_feeling_score ON public.feeling_verses (feeling_id, score DESC);
+CREATE INDEX IF NOT EXISTS idx_feeling_verses_feeling_strength ON public.feeling_verses (feeling_id, strength DESC);
 
 INSERT INTO public.feelings (id, parent_id, slug, name, wheel_term, sort_order) VALUES
   (1, NULL, 'alsurur', 'السرور', 'Happy', 1),
