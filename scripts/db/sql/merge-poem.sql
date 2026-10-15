@@ -59,6 +59,25 @@ BEGIN
   UPDATE public.poems
   SET recension_of_id = CASE WHEN id = p_keep THEN NULL ELSE p_keep END
   WHERE recension_of_id = p_absorb;
+  UPDATE public.feeling_verses fv
+  SET poem_id = p_keep, position = kept.position
+  FROM public.poem_verses absorbed
+  JOIN LATERAL (
+    SELECT min(k.position) AS position
+    FROM public.poem_verses k
+    WHERE k.poem_id = p_keep AND k.verse_id = absorbed.verse_id
+  ) kept ON kept.position IS NOT NULL
+  WHERE fv.poem_id = p_absorb
+    AND absorbed.poem_id = p_absorb
+    AND absorbed.position = fv.position
+    AND absorbed.position = (
+      SELECT min(a.position) FROM public.poem_verses a
+      WHERE a.poem_id = p_absorb AND a.verse_id = absorbed.verse_id
+    )
+    AND NOT EXISTS (
+      SELECT 1 FROM public.feeling_verses taken
+      WHERE taken.poem_id = p_keep AND taken.position = kept.position AND taken.feeling_id = fv.feeling_id
+    );
   DELETE FROM public.poems WHERE id = p_absorb;
   INSERT INTO public.poem_aliases (slug, poem_id) VALUES (v_absorb_slug, p_keep);
 END;

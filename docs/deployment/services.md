@@ -101,6 +101,7 @@ nginx also does these things:
 
 - the API proxy under `/api/`
 - the taxonomy term pages (`/collections`, `/meters`, `/rhymes`, and `/themes`, which read `page`)
+- the feeling pages (`/feelings/{slug}`, which read `page`)
 - `/poets` (`page`, `era`, `q`)
 - `/poets/{slug}` (`page`, `meter`, `rhyme`, `theme`)
 

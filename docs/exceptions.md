@@ -29,7 +29,7 @@ These departures are not approved yet. A full scan found them on 2026-09-24. The
 ### Full database dumps are committed to git under a homemade key scheme
 
 - **What:** every Postgres dump is committed as openssl-encrypted parts of 45 MB, with a hand-built key manifest. In October 2026, HEAD holds 90 parts (about 3.5 GB), and `.git` is about 3.5 GB.
-- **Where:** `data/README.md`, `data/db/`, `scripts/db/split-dump.sh`, `scripts/db/encrypt-dump.sh`, `scripts/db/resolve-dump.sh`, `scripts/dev/set-dump-key.sh`, `scripts/dev/check-dump-key.sh`
+- **Where:** `data/README.md`, `data/db/`, `data/feelings/`, `scripts/db/split-dump.sh`, `scripts/db/encrypt-dump.sh`, `scripts/db/resolve-dump.sh`, `scripts/dev/set-dump-key.sh`, `scripts/dev/check-dump-key.sh`
 - **Why it's unusual:** encrypted blobs never delta-compress, so every clone and every VPS fetch carries every version forever, and pushes already need the `pack.useSparse=false` workaround. The manifest "hash" is `openssl enc -P` with a salt hard-coded in two scripts. Passphrases go on the command line as `-pass "pass:..."`, where `ps` can read them. The "newest dump" lookup is repeated in six scripts.
 - **Normal approach:** dumps published as GitHub Release assets or R2 objects (R2 already holds avatars and backups) and downloaded by `db:up`. If encryption stays, use `age`, or at least `-pass env:VAR`.
 - **Status:** Needs review
@@ -818,6 +818,14 @@ Paths are relative to `apps/web/src/` unless they start at the repo root.
 - **Why:** nginx and Cloudflare cache pages for up to a day, and each cached copy carries the tags of the render that filled it. So every visitor of a copy continued one old trace, and the browser followed that render's sampling decision (#245). Sentry documents the fix: strip the tags before the response is cached. `@sentry/astro` has no option to leave them out, so we strip them. The browser then starts its own trace and samples 10% of page loads.
 - **Normal approach:** let the integration inject the tags, on a site that does not cache its HTML.
 - **Date:** 2026-10-08
+
+### The `/feelings` tree has its own SVG layout
+
+- **What:** `layoutUpright` places each feeling with its own constants, and estimates each label's width from its character count. The server renders the tree, and each label is an SVG `<text>` inside an SVG `<a>` to the feeling's page. The page draws a wide tree and a narrow tree, and a CSS container query shows one of them.
+- **Where:** `lib/feelings/upright-layout.ts`, `components/feelings/feeling-wheel.tsx`
+- **Why:** issue #263 asks for a tree that grows up from one question, and CSS cannot draw its curved branches. The server cannot measure text, so the label widths are estimates. The tests check that no label leaves the view box at either width. Both trees are in the HTML because the server cannot know the screen width.
+- **Normal approach:** a row of buttons for each level, laid out by CSS.
+- **Date:** 2026-10-11
 
 ## Search indexer (`apps/search-indexer`)
 
