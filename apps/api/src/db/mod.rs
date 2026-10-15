@@ -21,6 +21,7 @@ pub use qafiyah_corpus::schema as corpus;
 
 #[path = "../../generated/diesel/accounts.gen.rs"]
 pub mod accounts_schema;
+pub mod feelings;
 pub mod keys;
 pub mod poems;
 pub mod poets;

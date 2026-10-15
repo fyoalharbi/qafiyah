@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { serializePoetSearch } from './poet-search-params';
 import {
   dbDumpsUrl,
+  feelingUrl,
   githubUrl,
   poemUrl,
   poetAvatarUrl,
@@ -157,5 +158,13 @@ describe('go builders', () => {
 describe('poetAvatarUrl', () => {
   it('builds the CDN avatar url from the slug', () => {
     expect(poetAvatarUrl('CCMr')).toBe('https://cdn.qafiyah.com/poets/CCMr/avatar.webp');
+  });
+});
+
+describe('feelingUrl', () => {
+  it('builds the wheel, a feeling, and a later page', () => {
+    expect(feelingUrl()).toBe('/feelings');
+    expect(feelingUrl('alhuzn')).toBe('/feelings/alhuzn');
+    expect(feelingUrl('alhuzn', 2)).toBe('/feelings/alhuzn?page=2');
   });
 });

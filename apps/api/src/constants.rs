@@ -1,4 +1,5 @@
 pub const POEMS_PER_PAGE: u32 = 30;
+pub const FEELING_VERSES_PER_PAGE: u32 = 30;
 pub const SITEMAP_POEMS_PER_SHARD: u32 = 45000;
 pub const SITEMAP_POETS_PER_SHARD: u32 = 45000;
 pub const MAX_FILTER_SLUGS: usize = 100;

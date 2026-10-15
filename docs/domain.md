@@ -124,6 +124,10 @@ The theme is the poem's genre or purpose. An example is `alnasib` (النسيب)
 
 A collection is a published, curated anthology that a poem belongs to. It can be a diwan, or one of the classical foundational compilations. `apps/web/src/lib/seo/taxonomy-copy.ts` describes this taxonomy as "دواوين وأمهات الكتب" (diwans and foundational anthologies). Like themes, collections apply only to poems.
 
+## Feeling (شعور)
+
+A feeling is a node of the Feelings Wheel in Arabic, named by a verbal noun with its article, such as `alhuzn` (الحزن). Every feeling has a parent, except the seven core feelings. A verse can express up to three feelings (`docs/feelings.md`). Feelings apply only to verses of eras 1 to 5.
+
 ## The "unknown" value
 
 Poet, meter, and era each have a real row for **unknown** (`غير معروف`), not a foreign key that can be null. A poem or a poet goes there when the classical sources do not record that attribute.
@@ -275,6 +279,7 @@ The `*_stats` relations hold the poem and poet counts for each term, which the l
 
 - `poet_stats`, `meter_stats`, `rhyme_stats`, `era_stats`, `theme_stats`, `collection_stats`, `poem_type_stats`
 - the schema-only `genre_stats`, `nation_stats`, `gender_stats`
+- `feeling_stats`, the verse count of each feeling and every feeling below it, with each verse counted once. The same refresh ranks those verses in `feeling_branch_verses` (`docs/feelings.md`).
 
 They are **tables**, not views. As views, they counted the whole `poems` table again on every request, which took hundreds of milliseconds for each taxonomy index page.
 
