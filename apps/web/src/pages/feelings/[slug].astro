@@ -44,6 +44,7 @@ Astro.response.headers.set('Cache-Control', CACHE_HTML);
   title={title}
   description={description}
   canonical={feelingUrl(slug, page)}
+  robotsIndex={false}
   prevUrl={pagination.hasPrevPage ? pagination.prevPageUrl : undefined}
   nextUrl={pagination.hasNextPage ? pagination.nextPageUrl : undefined}
 >

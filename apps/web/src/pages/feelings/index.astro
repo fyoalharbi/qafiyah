@@ -15,7 +15,7 @@ const tree = buildFeelingTree(await allFeelings());
 Astro.response.headers.set('Cache-Control', CACHE_HTML);
 ---
 
-<Layout title={TITLE} description={DESCRIPTION} canonical="/feelings">
+<Layout title={TITLE} description={DESCRIPTION} canonical="/feelings" robotsIndex={false}>
   <div class="mx-auto flex w-full max-w-4xl flex-col gap-6 py-12" dir="rtl">
     <header class="flex flex-col items-center gap-3 text-center">
       <h1 class={`${TYPE.heading} text-text`}>لا تعرف كيف تعبّر عن شعورك؟</h1>
