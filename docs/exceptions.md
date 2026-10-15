@@ -674,9 +674,9 @@ Paths are relative to `apps/web/src/` unless they start at the repo root.
 
 ### Form POSTs rely on Astro's origin check instead of a CSRF token
 
-- **What:** no CSRF token; Astro rejects a POST without a matching `Origin` header with `403 Cross-site POST form submissions are forbidden` before the route runs, on top of the `SameSite=Lax` session cookie.
+- **What:** no CSRF token; Astro rejects a form POST from another site with `403 Cross-site POST form submissions are forbidden` before the route runs, on top of the `SameSite=Lax` session cookie. It reads `Sec-Fetch-Site` first, then `Origin`. A request with neither header passes, because a browser always sends one of them.
 - **Where:** `pages/account/`, `pages/auth/`, `apps/web/astro.config.mjs` (`security.allowedDomains`)
-- **Why:** the framework check and `SameSite=Lax` already cover cross-site forms. The check compares `Origin` with the request URL. TLS ends before nginx, so Astro sees `https://qafiyah.com` only because `security.allowedDomains` lets it trust nginx's `X-Forwarded-Proto: https`. Without that, every production POST is a 403. To test these routes with curl, add an explicit `-H 'Origin: ...'`.
+- **Why:** the framework check and `SameSite=Lax` already cover cross-site forms. The check compares `Origin` with the request URL. TLS ends before nginx, so Astro sees `https://qafiyah.com` only because `security.allowedDomains` lets it trust nginx's `X-Forwarded-Proto: https`. Without that, every production POST is a 403. To test the rejection with curl, add another site's `-H 'Origin: ...'`.
 - **Normal approach:** a per-form CSRF token.
 - **Date:** 2026-09-21
 
