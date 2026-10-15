@@ -13,7 +13,6 @@ import { ClientRouter } from 'astro:transitions';
     if (!isFeelingNavigation(event.from, event.to)) return;
     event.swap = () => {
       swapFunctions.deselectScripts(event.newDocument);
-      swapFunctions.swapRootAttributes(event.newDocument);
       swapFunctions.swapHeadElements(event.newDocument);
       morphMain(event.newDocument);
     };

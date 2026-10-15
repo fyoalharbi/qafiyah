@@ -11,9 +11,14 @@ export function FeelingVerseItem({ verse }: { readonly verse: FeelingVerseRow })
     <li className="border-b border-border last:border-b-0">
       <a
         href={poemUrl(verse.poem.slug, [jumpTerm(verse.parts)])}
-        className="flex flex-col items-center gap-4 rounded-sm px-2 py-7 transition-colors hover:bg-surface-hover focus-visible:ring-1 focus-visible:ring-text focus-visible:outline-none"
+        className="flex flex-col items-center gap-2 rounded-sm px-2 py-5 transition-colors hover:bg-surface-hover focus-visible:ring-1 focus-visible:ring-text focus-visible:outline-none"
       >
-        <div className="flex w-fit max-w-full min-w-[min(16em,100%)] flex-col gap-1 text-verse text-text sm:gap-1.5">
+        <div
+          className={cn(
+            TYPE.caption,
+            'flex w-fit max-w-full min-w-[min(16em,100%)] flex-col gap-1 text-text sm:text-body'
+          )}
+        >
           {verse.parts.map((part, partIndex) => (
             <p
               // oxlint-disable-next-line react/no-array-index-key -- parts keep their order within the stored row and can repeat
@@ -28,7 +33,7 @@ export function FeelingVerseItem({ verse }: { readonly verse: FeelingVerseRow })
             </p>
           ))}
         </div>
-        <p className={cn(TYPE.caption, 'text-text-subtle')}>{verse.poet.name}</p>
+        <p className={cn(TYPE.micro, 'text-text-subtle')}>{verse.poet.name}</p>
       </a>
     </li>
   );
