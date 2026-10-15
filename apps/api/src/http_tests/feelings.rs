@@ -70,15 +70,17 @@ impl FeelingRepository for Feelings {
         })
     }
 
-    async fn verses(&self, ids: &[i32], _: u32, _: u32) -> Result<Vec<FeelingVerse>, StoreError> {
-        let mut found = Vec::new();
-        if self.with_verses && ids.contains(&1) {
-            found.push(verse("sad"));
-        }
-        if self.with_verses && ids.contains(&2) {
-            found.extend([verse("lonely"), verse("lonely")]);
-        }
-        Ok(found)
+    async fn verses(
+        &self,
+        feeling_id: i32,
+        _: u32,
+        _: u32,
+    ) -> Result<Vec<FeelingVerse>, StoreError> {
+        Ok(match (self.with_verses, feeling_id) {
+            (true, 1) => vec![verse("sad"), verse("lonely"), verse("lonely")],
+            (true, 2) => vec![verse("lonely"), verse("lonely")],
+            _ => Vec::new(),
+        })
     }
 }
 

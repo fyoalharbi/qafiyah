@@ -50,7 +50,9 @@ Astro.response.headers.set('Cache-Control', CACHE_HTML);
   <div class="mx-auto flex w-full max-w-4xl flex-col gap-6 py-12" dir="rtl">
     <FeelingWheel tree={tree} path={path} />
     <section class="flex flex-col gap-3 border-t border-border pt-8">
-      <p class={cn(TYPE.caption, 'text-text-subtle')}>{chain.map((f) => f.name).join(' ← ')}</p>
+      {chain.length > 1 && (
+        <p class={cn(TYPE.caption, 'text-text-subtle')}>{chain.map((f) => f.name).join(' ← ')}</p>
+      )}
       <h1 class={cn(TYPE.heading, 'text-highlight')}>{feeling.name}</h1>
       <p class={cn(TYPE.caption, 'text-text-muted')}>{count}</p>
       <ul class="flex flex-col">

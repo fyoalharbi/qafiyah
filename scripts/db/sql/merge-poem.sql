@@ -78,7 +78,6 @@ BEGIN
       SELECT 1 FROM public.feeling_verses taken
       WHERE taken.poem_id = p_keep AND taken.position = kept.position AND taken.feeling_id = fv.feeling_id
     );
-  DELETE FROM public.feeling_verses WHERE poem_id = p_absorb;
   DELETE FROM public.poems WHERE id = p_absorb;
   INSERT INTO public.poem_aliases (slug, poem_id) VALUES (v_absorb_slug, p_keep);
 END;

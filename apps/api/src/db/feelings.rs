@@ -1,12 +1,9 @@
-use std::collections::HashMap;
-
 use async_trait::async_trait;
-use diesel::dsl::max;
 use diesel::prelude::*;
 use diesel_async::RunQueryDsl;
 
 use crate::db::corpus::{
-    eras, feeling_stats, feeling_verses, feelings, poem_verses, poems, poets, verses,
+    eras, feeling_branch_verses, feeling_stats, feelings, poem_verses, poems, poets, verses,
 };
 use crate::db::{PgPool, int, present};
 use crate::domain::feelings::{Feeling, FeelingRepository, FeelingVerse};
@@ -25,9 +22,8 @@ impl PgFeelings {
 
 type FeelingRow = (i32, Option<i32>, String, String, Option<String>, i32);
 type VerseRow = (
-    i32,
-    i32,
     String,
+    i32,
     String,
     String,
     String,
@@ -42,9 +38,8 @@ type VerseRow = (
 
 fn verse(
     (
-        _,
-        position,
         content,
+        position,
         feeling_name,
         feeling_slug,
         title,
@@ -124,54 +119,38 @@ impl FeelingRepository for PgFeelings {
 
     async fn verses(
         &self,
-        feeling_ids: &[i32],
+        feeling_id: i32,
         page: u32,
         page_size: u32,
     ) -> Result<Vec<FeelingVerse>, StoreError> {
+        let first = i64::from(page.saturating_sub(1))
+            .saturating_mul(i64::from(page_size))
+            .saturating_add(1);
+        let Ok(first_rank) = i32::try_from(first) else {
+            return Ok(Vec::new());
+        };
+        let last_rank = i32::try_from(first.saturating_add(i64::from(page_size)).saturating_sub(1))
+            .unwrap_or(i32::MAX);
         let mut conn = self.pool.get().await?;
-        let offset = i64::from(page.saturating_sub(1)).saturating_mul(i64::from(page_size));
-        let keys = feeling_verses::table
-            .inner_join(poems::table.on(poems::id.eq(feeling_verses::poem_id)))
-            .inner_join(poets::table.on(poets::id.eq(poems::poet_id)))
-            .filter(feeling_verses::feeling_id.eq_any(feeling_ids))
-            .filter(poems::is_hidden.eq(false))
-            .filter(poems::recension_of_id.is_null())
-            .filter(poets::is_hidden.eq(false))
-            .group_by((feeling_verses::poem_id, feeling_verses::position))
-            .select((feeling_verses::poem_id, feeling_verses::position))
-            .order((
-                max(feeling_verses::strength).desc(),
-                feeling_verses::poem_id.asc(),
-                feeling_verses::position.asc(),
-            ))
-            .limit(i64::from(page_size))
-            .offset(offset)
-            .load::<(i32, i32)>(&mut conn)
-            .await?;
-        let poem_ids: Vec<i32> = keys.iter().map(|(poem, _)| *poem).collect();
-        let positions: Vec<i32> = keys.iter().map(|(_, position)| *position).collect();
-        let rows = feeling_verses::table
-            .inner_join(feelings::table)
+        Ok(feeling_branch_verses::table
+            .inner_join(
+                feelings::table.on(feelings::id.eq(feeling_branch_verses::verse_feeling_id)),
+            )
             .inner_join(
                 poem_verses::table.on(poem_verses::poem_id
-                    .eq(feeling_verses::poem_id)
-                    .and(poem_verses::position.eq(feeling_verses::position))),
+                    .eq(feeling_branch_verses::poem_id)
+                    .and(poem_verses::position.eq(feeling_branch_verses::position))),
             )
             .inner_join(verses::table.on(verses::id.eq(poem_verses::verse_id)))
-            .inner_join(poems::table.on(poems::id.eq(feeling_verses::poem_id)))
+            .inner_join(poems::table.on(poems::id.eq(feeling_branch_verses::poem_id)))
             .inner_join(poets::table.on(poets::id.eq(poems::poet_id)))
             .inner_join(eras::table.on(eras::id.eq(poems::era_id)))
-            .filter(feeling_verses::feeling_id.eq_any(feeling_ids))
-            .filter(feeling_verses::poem_id.eq_any(&poem_ids))
-            .filter(feeling_verses::position.eq_any(&positions))
-            .order((
-                feeling_verses::strength.desc(),
-                feeling_verses::feeling_id.asc(),
-            ))
+            .filter(feeling_branch_verses::feeling_id.eq(feeling_id))
+            .filter(feeling_branch_verses::rank.between(first_rank, last_rank))
+            .order(feeling_branch_verses::rank.asc())
             .select((
-                feeling_verses::poem_id,
-                feeling_verses::position,
                 verses::content,
+                feeling_branch_verses::position,
                 feelings::name,
                 feelings::slug,
                 poems::title,
@@ -184,14 +163,8 @@ impl FeelingRepository for PgFeelings {
                 eras::slug,
             ))
             .load::<VerseRow>(&mut conn)
-            .await?;
-        let mut strongest: HashMap<(i32, i32), VerseRow> = HashMap::new();
-        for row in rows {
-            strongest.entry((row.0, row.1)).or_insert(row);
-        }
-        Ok(keys
-            .iter()
-            .filter_map(|key| strongest.remove(key))
+            .await?
+            .into_iter()
             .map(verse)
             .collect())
     }

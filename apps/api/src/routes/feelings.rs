@@ -4,7 +4,7 @@ use serde::Deserialize;
 
 use crate::constants::FEELING_VERSES_PER_PAGE;
 use crate::contract::feelings::{FeelingItem, FeelingVerseItem};
-use crate::domain::feelings::{self, Feeling, FeelingNode};
+use crate::domain::feelings::{self, FeelingNode};
 use crate::envelope::{ItemEnvelope, ListEnvelope, build_pagination};
 use crate::error::{AppError, Resource};
 use crate::extract::{SafePath, SafeQuery, invalid_path_slug};
@@ -21,11 +21,10 @@ pub(crate) struct VersesParams {
     page: Option<AnyPage>,
 }
 
-async fn tree(state: &AppState) -> Result<(Vec<Feeling>, Vec<FeelingNode>), AppError> {
+async fn tree(state: &AppState) -> Result<Vec<FeelingNode>, AppError> {
     let all = state.feelings.all().await?;
     let counts = state.feelings.branch_counts().await?;
-    let nodes = feelings::nodes(&all, &counts);
-    Ok((all, nodes))
+    Ok(feelings::nodes(&all, &counts))
 }
 
 fn find(nodes: Vec<FeelingNode>, raw: &str) -> Result<FeelingNode, AppError> {
@@ -52,7 +51,7 @@ pub(crate) async fn list(
     State(state): State<AppState>,
     _: SafeQuery<NoParams>,
 ) -> Result<Json<ListEnvelope<FeelingItem>>, AppError> {
-    let (_, nodes) = tree(&state).await?;
+    let nodes = tree(&state).await?;
     let rows: Vec<FeelingItem> = nodes.into_iter().map(FeelingItem::from).collect();
     let count = u32::try_from(rows.len()).unwrap_or(u32::MAX);
     crate::log::record_results(u64::from(count));
@@ -81,7 +80,7 @@ pub(crate) async fn get(
     SafePath(raw): SafePath<String>,
     _: SafeQuery<NoParams>,
 ) -> Result<Json<ItemEnvelope<FeelingItem>>, AppError> {
-    let (_, nodes) = tree(&state).await?;
+    let nodes = tree(&state).await?;
     Ok(Json(ItemEnvelope {
         data: FeelingItem::from(find(nodes, &raw)?),
     }))
@@ -107,16 +106,11 @@ pub(crate) async fn verses(
     SafePath(raw): SafePath<String>,
     SafeQuery(params): SafeQuery<VersesParams>,
 ) -> Result<Json<ListEnvelope<FeelingVerseItem>>, AppError> {
-    let (all, nodes) = tree(&state).await?;
-    let node = find(nodes, &raw)?;
+    let node = find(tree(&state).await?, &raw)?;
     let page = params.page.map_or(1, AnyPage::get);
     let found = state
         .feelings
-        .verses(
-            &feelings::branch_ids(&all, node.id),
-            page,
-            FEELING_VERSES_PER_PAGE,
-        )
+        .verses(node.id, page, FEELING_VERSES_PER_PAGE)
         .await?;
     let total = node.verse_count.cast_unsigned();
     crate::log::record_results(u64::from(total));

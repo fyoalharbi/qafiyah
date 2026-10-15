@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS public.feeling_verses (
   feeling_id integer NOT NULL REFERENCES public.feelings (id),
   strength smallint NOT NULL CHECK (strength BETWEEN 1 AND 3),
   PRIMARY KEY (poem_id, position, feeling_id),
-  FOREIGN KEY (poem_id, position) REFERENCES public.poem_verses (poem_id, position) ON UPDATE CASCADE
+  FOREIGN KEY (poem_id, position) REFERENCES public.poem_verses (poem_id, position) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE INDEX IF NOT EXISTS idx_feeling_verses_feeling_strength ON public.feeling_verses (feeling_id, strength DESC);

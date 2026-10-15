@@ -279,7 +279,7 @@ The `*_stats` relations hold the poem and poet counts for each term, which the l
 
 - `poet_stats`, `meter_stats`, `rhyme_stats`, `era_stats`, `theme_stats`, `collection_stats`, `poem_type_stats`
 - the schema-only `genre_stats`, `nation_stats`, `gender_stats`
-- `feeling_stats`, the verse count of each feeling and every feeling below it, with each verse counted once
+- `feeling_stats`, the verse count of each feeling and every feeling below it, with each verse counted once. The same refresh ranks those verses in `feeling_branch_verses` (`docs/feelings.md`).
 
 They are **tables**, not views. As views, they counted the whole `poems` table again on every request, which took hundreds of milliseconds for each taxonomy index page.
 

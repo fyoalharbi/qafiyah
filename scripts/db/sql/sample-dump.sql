@@ -30,10 +30,6 @@ DELETE FROM poem_aliases a WHERE NOT EXISTS (
   SELECT 1 FROM sampled_poem_ids s WHERE s.id = a.poem_id
 );
 
-DELETE FROM feeling_verses fv WHERE NOT EXISTS (
-  SELECT 1 FROM sampled_poem_ids s WHERE s.id = fv.poem_id
-);
-
 DELETE FROM poems p WHERE NOT EXISTS (
   SELECT 1 FROM sampled_poem_ids s WHERE s.id = p.id
 );

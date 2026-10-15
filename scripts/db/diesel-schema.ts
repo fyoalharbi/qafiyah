@@ -7,6 +7,7 @@ const CORPUS_TABLES = [
   'collections',
   'era_stats',
   'eras',
+  'feeling_branch_verses',
   'feeling_stats',
   'feeling_verses',
   'feelings',

@@ -41,6 +41,16 @@ diesel::table! {
 }
 
 diesel::table! {
+    feeling_branch_verses (feeling_id, rank) {
+        feeling_id -> Int4,
+        rank -> Int4,
+        poem_id -> Int4,
+        position -> Int4,
+        verse_feeling_id -> Int4,
+    }
+}
+
+diesel::table! {
     feeling_stats (id) {
         id -> Int4,
         verses_count -> Nullable<Int8>,
@@ -254,6 +264,7 @@ diesel::allow_tables_to_appear_in_same_query!(
     collections,
     era_stats,
     eras,
+    feeling_branch_verses,
     feeling_stats,
     feeling_verses,
     feelings,

@@ -36,22 +36,10 @@ pub trait FeelingRepository: Send + Sync {
     async fn branch_counts(&self) -> Result<Vec<(i32, i32)>, StoreError>;
     async fn verses(
         &self,
-        feeling_ids: &[i32],
+        feeling_id: i32,
         page: u32,
         page_size: u32,
     ) -> Result<Vec<FeelingVerse>, StoreError>;
-}
-
-pub fn branch_ids(feelings: &[Feeling], id: i32) -> Vec<i32> {
-    let mut ids = vec![id];
-    let mut pending = vec![id];
-    while let Some(current) = pending.pop() {
-        for child in feelings.iter().filter(|f| f.parent_id == Some(current)) {
-            ids.push(child.id);
-            pending.push(child.id);
-        }
-    }
-    ids
 }
 
 fn depth_first<'a>(feelings: &'a [Feeling], parent: Option<i32>, out: &mut Vec<&'a Feeling>) {
@@ -116,14 +104,6 @@ mod tests {
 
     fn slugs(nodes: Vec<FeelingNode>) -> Vec<String> {
         nodes.into_iter().map(|n| n.slug).collect()
-    }
-
-    #[test]
-    fn a_branch_holds_the_feeling_and_everything_below_it() {
-        let mut ids = branch_ids(&tree(), 1);
-        ids.sort_unstable();
-        assert_eq!(ids, vec![1, 3, 4, 5]);
-        assert_eq!(branch_ids(&tree(), 5), vec![5]);
     }
 
     #[test]
