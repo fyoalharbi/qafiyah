@@ -1,0 +1,28 @@
+---
+import { ClientRouter } from 'astro:transitions';
+---
+
+<ClientRouter fallback="none" />
+
+<script>
+  import { swapFunctions } from 'astro:transitions/client';
+
+  import { isFeelingNavigation, morphMain } from '@/lib/feelings/morph-feeling-page';
+
+  document.addEventListener('astro:before-swap', (event) => {
+    if (!isFeelingNavigation(event.from, event.to)) return;
+    event.swap = () => {
+      swapFunctions.deselectScripts(event.newDocument);
+      swapFunctions.swapRootAttributes(event.newDocument);
+      swapFunctions.swapHeadElements(event.newDocument);
+      morphMain(event.newDocument);
+    };
+  });
+</script>
+
+<style is:global>
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+</style>

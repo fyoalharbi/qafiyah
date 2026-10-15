@@ -40,6 +40,7 @@ const htmlClass = isDev ? 'debug-screens' : '';
     <ViewerInit />
     <InAppBrowserInit />
     {isDev && <LayoutDebug />}
+    <slot name="head" />
   </head>
   {bare ? (
     <body class="grid min-h-svh place-items-center bg-surface px-4 py-10 font-sans text-text">

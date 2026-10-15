@@ -827,6 +827,18 @@ Paths are relative to `apps/web/src/` unless they start at the repo root.
 - **Normal approach:** a row of buttons for each level, laid out by CSS.
 - **Date:** 2026-10-11
 
+### The `/feelings` pages morph in place
+
+- **What:** the feelings pages turn on Astro's `<ClientRouter />`. Between two feelings pages, an `astro:before-swap` listener swaps the head as Astro does, then morphs `#main` with idiomorph.
+  - Each tree node has a stable `id`, so the morph keeps it. Its CSS fade and the zoom `transform` then animate to the new page.
+  - A node that leaves fades out for 300 ms, then is removed.
+  - The server still renders every page. A link to any other page loads it in full.
+- **Where:** `components/feelings/feeling-navigation.astro`, `lib/feelings/morph-feeling-page.ts`, `components/feelings/feeling-wheel.tsx`, the `head` slot in `layouts/layout.astro`
+- **Why:** a full page load throws the tree away, so it redraws from nothing on every click. The tree must keep its place for the reader to see where they are in it. Astro's own swap replaces the whole body, and a view transition cannot animate elements inside an SVG.
+  - PostHog's `capture_pageview: 'history_change'` compares only the path, so a change of only `?page=` is not a pageview.
+- **Normal approach:** links that load each page in full, or Astro's `<ClientRouter />` with its default swap.
+- **Date:** 2026-10-15
+
 ## Search indexer (`apps/search-indexer`)
 
 ### A Compose init job that reindexes only empty aliases

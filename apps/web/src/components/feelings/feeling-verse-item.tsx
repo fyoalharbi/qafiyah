@@ -1,37 +1,35 @@
-import { INLINE_LINK, TYPE } from '@/lib/constants/design-tokens';
+import { TYPE } from '@/lib/constants/design-tokens';
 import { jumpTerm } from '@/lib/feelings/jump-term';
-import { feelingUrl, poemUrl } from '@/lib/urls';
+import { poemUrl } from '@/lib/urls';
 import { cn } from '@/lib/utils';
 
 import type { FeelingVerseRow } from '@/lib/server/feelings';
 
-export function FeelingVerseItem({
-  verse,
-  showFeeling,
-}: {
-  readonly verse: FeelingVerseRow;
-  readonly showFeeling: boolean;
-}) {
+export function FeelingVerseItem({ verse }: { readonly verse: FeelingVerseRow }) {
+  const halves = verse.parts.length === 2;
   return (
-    <li className="flex flex-col gap-1.5 border-b border-border py-5 last:border-b-0">
-      <p className={cn(TYPE.subheading, 'flex flex-wrap gap-x-11 leading-loose text-text')}>
-        {verse.parts.map((part, partIndex) => (
-          // oxlint-disable-next-line react/no-array-index-key -- parts keep their order within the stored row and can repeat
-          <span key={`${partIndex}|${part}`}>{part}</span>
-        ))}
-      </p>
-      <p className={cn(TYPE.caption, 'flex flex-wrap gap-x-3.5 text-text-muted')}>
-        <span>{verse.poet.name}</span>
-        <span>{verse.era.name}</span>
-        <a href={poemUrl(verse.poem.slug, [jumpTerm(verse.parts)])} className={INLINE_LINK}>
-          {verse.poem.title}
-        </a>
-        {showFeeling && (
-          <a href={feelingUrl(verse.feeling.slug)} className={INLINE_LINK}>
-            {verse.feeling.name}
-          </a>
-        )}
-      </p>
+    <li className="border-b border-border last:border-b-0">
+      <a
+        href={poemUrl(verse.poem.slug, [jumpTerm(verse.parts)])}
+        className="flex flex-col items-center gap-4 rounded-sm px-2 py-7 transition-colors hover:bg-surface-hover focus-visible:ring-1 focus-visible:ring-text focus-visible:outline-none"
+      >
+        <div className="flex w-fit max-w-full min-w-[min(16em,100%)] flex-col gap-1 text-verse text-text sm:gap-1.5">
+          {verse.parts.map((part, partIndex) => (
+            <p
+              // oxlint-disable-next-line react/no-array-index-key -- parts keep their order within the stored row and can repeat
+              key={`${partIndex}|${part}`}
+              lang="ar"
+              className={cn(
+                'text-center',
+                halves && (partIndex === 0 ? 'text-right sm:pe-12' : 'text-left sm:ps-12')
+              )}
+            >
+              {part}
+            </p>
+          ))}
+        </div>
+        <p className={cn(TYPE.caption, 'text-text-subtle')}>{verse.poet.name}</p>
+      </a>
     </li>
   );
 }

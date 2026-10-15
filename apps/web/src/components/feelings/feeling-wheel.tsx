@@ -46,16 +46,21 @@ function statusOf(nodePath: readonly number[], path: readonly number[]): Status 
   return nodePath[0] === path[0] ? 'near' : 'far';
 }
 
+type Variant = 'wide' | 'narrow';
+
 type FeelingTreeProps = {
+  readonly variant: Variant;
   readonly layout: UprightLayout;
   readonly path: readonly number[];
   readonly className: string;
 };
 
-function FeelingTree({ layout, path, className }: FeelingTreeProps) {
+function FeelingTree({ variant, layout, path, className }: FeelingTreeProps) {
   const { viewBox } = layout;
+  const nodeId = (part: string, key: string): string => `feeling-${variant}-${part}-${key}`;
   return (
     <svg
+      id={`feeling-tree-${variant}`}
       viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
       direction="rtl"
       role="group"
@@ -63,6 +68,8 @@ function FeelingTree({ layout, path, className }: FeelingTreeProps) {
       className={cn('h-auto w-full select-none', className)}
     >
       <g
+        id={`feeling-zoom-${variant}`}
+        className="motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-in-out"
         style={{
           transform: layout.transform,
           transformOrigin: '0 0',
@@ -78,6 +85,8 @@ function FeelingTree({ layout, path, className }: FeelingTreeProps) {
         {layout.items.map((item) => (
           <path
             key={item.key}
+            id={nodeId('edge', item.key)}
+            data-feeling-node=""
             d={edgePath(item)}
             fill="none"
             pathLength={1}
@@ -93,6 +102,8 @@ function FeelingTree({ layout, path, className }: FeelingTreeProps) {
         {layout.items.map((item) => (
           <a
             key={item.key}
+            id={nodeId('label', item.key)}
+            data-feeling-node=""
             href={feelingUrl(item.slug)}
             aria-current={
               item.path.length === path.length && startsWith(path, item.path) ? 'page' : undefined
@@ -148,11 +159,13 @@ export function FeelingWheel({
   return (
     <div className="@container">
       <FeelingTree
+        variant="wide"
         layout={layoutUpright(tree, path, false)}
         path={path}
         className="hidden @min-[560px]:block"
       />
       <FeelingTree
+        variant="narrow"
         layout={layoutUpright(tree, path, true)}
         path={path}
         className="@min-[560px]:hidden"

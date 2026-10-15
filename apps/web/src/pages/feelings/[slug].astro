@@ -1,4 +1,5 @@
 ---
+import FeelingNavigation from '@/components/feelings/feeling-navigation.astro';
 import { FeelingVerseItem } from '@/components/feelings/feeling-verse-item';
 import { FeelingWheel } from '@/components/feelings/feeling-wheel';
 import { Pagination } from '@/components/pagination';
@@ -48,17 +49,15 @@ Astro.response.headers.set('Cache-Control', CACHE_HTML);
   prevUrl={pagination.hasPrevPage ? pagination.prevPageUrl : undefined}
   nextUrl={pagination.hasNextPage ? pagination.nextPageUrl : undefined}
 >
+  <FeelingNavigation slot="head" />
   <div class="mx-auto flex w-full max-w-4xl flex-col gap-6 py-12" dir="rtl">
     <FeelingWheel tree={tree} path={path} />
     <section class="flex flex-col gap-3 border-t border-border pt-8">
-      {chain.length > 1 && (
-        <p class={cn(TYPE.caption, 'text-text-subtle')}>{chain.map((f) => f.name).join(' ← ')}</p>
-      )}
-      <h1 class={cn(TYPE.heading, 'text-highlight')}>{feeling.name}</h1>
-      <p class={cn(TYPE.caption, 'text-text-muted')}>{count}</p>
+      <h1 class="sr-only">{feeling.name}</h1>
+      <p class={cn(TYPE.caption, 'text-center text-text-subtle')}>{count}</p>
       <ul class="flex flex-col">
         {found.verses.map((verse) => (
-          <FeelingVerseItem verse={verse} showFeeling={verse.feeling.slug !== slug} />
+          <FeelingVerseItem verse={verse} />
         ))}
       </ul>
       <Pagination {...pagination} />
