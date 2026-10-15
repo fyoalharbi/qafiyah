@@ -36,13 +36,14 @@ jobs:
       docker-phases: ${{ github.event_name == 'workflow_dispatch' && '["diagrams","db","origin","stack"]' || steps.filter.outputs.changes }}
 
     steps:
-      - name: Checkout code without the production dumps and avatars
+      - name: Checkout code without the production snapshots
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             /*
             !/data/avatars/
+            !/data/feelings/
             !/data/db/*/
             /data/db/0000_default/
 
@@ -67,6 +68,7 @@ jobs:
                 - "!data/db/keys.manifest"
                 - "!data/db/[0-9]*_[0-9]*/**"
                 - "!data/avatars/**"
+                - "!data/feelings/**"
                 - "!secrets/**"
                 - "!.sops.yaml"
                 - "!.github/*"
@@ -112,13 +114,14 @@ jobs:
     timeout-minutes: 30
 
     steps:
-      - name: Checkout code without the production dumps and avatars
+      - name: Checkout code without the production snapshots
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             /*
             !/data/avatars/
+            !/data/feelings/
             !/data/db/*/
             /data/db/0000_default/
 
@@ -163,13 +166,14 @@ jobs:
         phase: ${{ fromJSON(needs.changes.outputs.docker-phases) }}
 
     steps:
-      - name: Checkout code without the production dumps and avatars
+      - name: Checkout code without the production snapshots
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           sparse-checkout-cone-mode: false
           sparse-checkout: |
             /*
             !/data/avatars/
+            !/data/feelings/
             !/data/db/*/
             /data/db/0000_default/
 

@@ -92,10 +92,11 @@ There are three independent stores, with different roles:
 - **Elasticsearch** is a derived search index. `search-indexer` rebuilds it fully from Postgres. Nothing backs it up directly. `bun run reindex` or `bun run reindex:prod` makes it again from Postgres when necessary.
 - **R2** is object storage for poet avatar images. It is independent of Postgres: `poet.has_avatar` refers to an image, but Postgres does not store it.
 
-`data/` keeps copies of the two stores that are hard to make again:
+`data/` keeps copies of the data that is hard to make again:
 
 - `data/db/`: versioned, encrypted Postgres dump snapshots. Scripts handle them (`bun run db:reset`, `bun run db:reseed`, and the database seeds itself). See `data/db/README.md` and `data/db/MAINTAINERS_GUIDE.md`.
 - `data/avatars/`: versioned, encrypted snapshots of the avatar zip. They use the same directory names and encryption as `data/db/`. But they are manual today, with no dedicated scripts. See `data/avatars/README.md`.
+- `data/feelings/`: versioned, encrypted snapshots of the feelings that a language model gave each classical verse. Their encryption is manual, like the avatars. See `data/feelings/README.md`.
 
 ## Codebase topology
 
@@ -129,7 +130,7 @@ The conventions are in `docs/code-conventions.md`, `docs/typescript-conventions.
   - A push that touches only these files runs the gate alone: docs, agent guides, repo templates, lint configuration that only the gate reads, or encrypted files (secrets, production dumps, avatars).
   - A change to the website only skips `db`.
   - A path on no skip list runs every phase. A manual run (`workflow_dispatch`) runs them all.
-- Every job does a sparse checkout. It leaves out the encrypted production dumps and avatars (about 3.7 GB in October 2026). It keeps the committed 100-poem sample that the Docker phases run on, so they need no secrets.
+- Every job does a sparse checkout. It leaves out the encrypted production dumps, avatars, and feelings (about 3.7 GB in October 2026). It keeps the committed 100-poem sample that the Docker phases run on, so they need no secrets.
 
 Two other workflows run on pull requests:
 

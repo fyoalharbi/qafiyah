@@ -29,7 +29,7 @@ These departures are not approved yet. A full scan found them on 2026-09-24. The
 ### Full database dumps are committed to git under a homemade key scheme
 
 - **What:** every Postgres dump is committed as openssl-encrypted parts of 45 MB, with a hand-built key manifest. In October 2026, HEAD holds 90 parts (about 3.5 GB), and `.git` is about 3.5 GB.
-- **Where:** `data/README.md`, `data/db/`, `scripts/db/split-dump.sh`, `scripts/db/encrypt-dump.sh`, `scripts/db/resolve-dump.sh`, `scripts/dev/set-dump-key.sh`, `scripts/dev/check-dump-key.sh`
+- **Where:** `data/README.md`, `data/db/`, `data/feelings/`, `scripts/db/split-dump.sh`, `scripts/db/encrypt-dump.sh`, `scripts/db/resolve-dump.sh`, `scripts/dev/set-dump-key.sh`, `scripts/dev/check-dump-key.sh`
 - **Why it's unusual:** encrypted blobs never delta-compress, so every clone and every VPS fetch carries every version forever, and pushes already need the `pack.useSparse=false` workaround. The manifest "hash" is `openssl enc -P` with a salt hard-coded in two scripts. Passphrases go on the command line as `-pass "pass:..."`, where `ps` can read them. The "newest dump" lookup is repeated in six scripts.
 - **Normal approach:** dumps published as GitHub Release assets or R2 objects (R2 already holds avatars and backups) and downloaded by `db:up`. If encryption stays, use `age`, or at least `-pass env:VAR`.
 - **Status:** Needs review
