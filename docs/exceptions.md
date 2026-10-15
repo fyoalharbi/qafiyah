@@ -832,7 +832,7 @@ Paths are relative to `apps/web/src/` unless they start at the repo root.
 - **What:** the feelings pages turn on Astro's `<ClientRouter />`. Between two feelings pages, an `astro:before-swap` listener swaps the head as Astro does, then morphs `#main` with idiomorph.
   - Each tree node has a stable `id`, so the morph keeps it. Its CSS fade and the zoom `transform` then animate to the new page.
   - A node that leaves fades out for 300 ms, then is removed.
-  - The server still renders every page. A link to any other page loads it in full.
+  - The server still renders every page. A link to any other page loads it in full: an `astro:before-preparation` listener stops the router before it fetches that page, or the server renders it twice (once for the router's fetch, once for the full load).
   - `prefetch: false` in `astro.config.mjs` stops `<ClientRouter />` from prefetching every link on hover. Each prefetch renders a page and calls the API.
 - **Where:** `components/feelings/feeling-navigation.astro`, `lib/feelings/morph-feeling-page.ts`, `components/feelings/feeling-wheel.tsx`, the `head` slot in `layouts/layout.astro`
 - **Why:** a full page load throws the tree away, so it redraws from nothing on every click. The tree must keep its place for the reader to see where they are in it. Astro's own swap replaces the whole body, and a view transition cannot animate elements inside an SVG.
