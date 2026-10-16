@@ -834,7 +834,7 @@ Paths are relative to `apps/web/src/` unless they start at the repo root.
   - Only a node that the morph adds draws or fades in: idiomorph's `afterNodeAdded` marks it `data-entering`. A full load or a reload shows the whole tree at once.
   - A node that leaves fades out for 300 ms, then is removed.
   - `<ClientRouter />` sets `history.scrollRestoration` to `manual` and restores the scroll position with its own script, after the first paint. So a reload of a scrolled feelings page showed the top for a moment. `pagehide` sets it back to `auto`, so the browser restores a reload before it paints, and `pageshow` sets it to `manual` again for the router.
-  - The server still renders every page. A link to any other page loads it in full: an `astro:before-preparation` listener stops the router before it fetches that page, or the server renders it twice (once for the router's fetch, once for the full load).
+  - The server still renders every page. A link to any other page loads it in full. An `astro:before-preparation` listener stops the router before it fetches that page. Without it, the server renders that page twice: once for the router's fetch, and once for the full load.
   - `prefetch: false` in `astro.config.mjs` stops `<ClientRouter />` from prefetching every link on hover. Each prefetch renders a page and calls the API.
   - The morph does not run the new page's scripts. So a script that a feelings page needs goes on both pages, like the verse copy button's (`components/feelings/verse-copy.astro`).
 - **Where:** `components/feelings/feeling-navigation.astro`, `components/feelings/verse-copy.astro`, `lib/feelings/morph-feeling-page.ts`, `components/feelings/feeling-wheel.tsx`, the `head` slot in `layouts/layout.astro`

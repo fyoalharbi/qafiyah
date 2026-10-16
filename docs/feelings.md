@@ -20,7 +20,7 @@ The `/feelings` page helps a reader who can't name what they feel. It draws the 
   - The pages call the API while they render. The browser gets HTML, and fetches no JSON.
   - `lib/feelings/upright-layout.ts` places each label. `docs/exceptions.md` ("The `/feelings` tree has its own SVG layout") explains why the layout is custom.
   - A click from one feelings page to another morphs the page in place, so the tree animates to the new feeling. `docs/exceptions.md` ("The `/feelings` pages morph in place") explains how.
-  - Each verse shows its two halves like the poem page, and only the poet's name. The whole verse links to its poem, and the poem page scrolls to the verse.
+  - Each verse is a row: its two halves, then a copy button, the poet, the era, and the verse's own feeling. The whole row links to its poem, and the poem page scrolls to the verse.
 
 ## How the verses were classified
 

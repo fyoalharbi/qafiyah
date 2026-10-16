@@ -1,7 +1,7 @@
 import { Idiomorph } from 'idiomorph';
 
-const LEAVE_STYLE = 'opacity:0;transition:opacity 300ms ease-out;pointer-events:none';
 const LEAVE_MS = 300;
+const LEAVE_STYLE = `opacity:0;transition:opacity ${LEAVE_MS}ms ease-out;pointer-events:none`;
 
 const isFeelingPath = (url: URL): boolean =>
   url.pathname === '/feelings' || url.pathname.startsWith('/feelings/');
