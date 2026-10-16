@@ -6,17 +6,15 @@ import { TYPE } from '@/lib/constants/design-tokens';
 import { buildFeelingTree } from '@/lib/feelings/feeling-tree';
 import { CACHE_HTML } from '@/lib/server/cache';
 import { allFeelings } from '@/lib/server/feelings';
-import { withBrand } from '@/lib/seo/meta-text';
+import { buildFeelingsIndexSeo } from '@/lib/seo/feelings-page';
 
-const TITLE = withBrand('المشاعر');
-const DESCRIPTION =
-  'لا تعرف كيف تعبّر عن شعورك؟ اختر ما يقرب منه في عجلة المشاعر، واقرأ من الشعر ما يشبهه.';
-
-const tree = buildFeelingTree(await allFeelings());
+const feelings = await allFeelings();
+const tree = buildFeelingTree(feelings);
+const seo = buildFeelingsIndexSeo(feelings);
 Astro.response.headers.set('Cache-Control', CACHE_HTML);
 ---
 
-<Layout title={TITLE} description={DESCRIPTION} canonical="/feelings">
+<Layout title={seo.title} description={seo.description} canonical="/feelings" jsonLd={seo.jsonLd}>
   <FeelingNavigation slot="head" />
   <div class="mx-auto flex w-full max-w-4xl flex-col gap-6 py-12" dir="rtl">
     <header class="flex flex-col items-center gap-3 text-center">
