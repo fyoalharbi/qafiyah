@@ -2,7 +2,6 @@
 import FeelingNavigation from '@/components/feelings/feeling-navigation.astro';
 import { FeelingWheel } from '@/components/feelings/feeling-wheel';
 import Layout from '@/layouts/layout.astro';
-import { TYPE } from '@/lib/constants/design-tokens';
 import { buildFeelingTree } from '@/lib/feelings/feeling-tree';
 import { CACHE_HTML } from '@/lib/server/cache';
 import { allFeelings } from '@/lib/server/feelings';
@@ -17,10 +16,7 @@ Astro.response.headers.set('Cache-Control', CACHE_HTML);
 <Layout title={seo.title} description={seo.description} canonical="/feelings" jsonLd={seo.jsonLd}>
   <FeelingNavigation slot="head" />
   <div class="mx-auto flex w-full max-w-4xl flex-col gap-6 py-12" dir="rtl">
-    <header class="flex flex-col items-center gap-3 text-center">
-      <h1 class={`${TYPE.heading} text-text`}>لا تعرف كيف تعبّر عن شعورك؟</h1>
-      <p class={`${TYPE.body} text-text-muted`}>اختر ما يقرب منه، وسنضيّق الدائرة معًا.</p>
-    </header>
+    <h1 class="sr-only">عجلة المشاعر</h1>
     <FeelingWheel tree={tree} path={[]} />
   </div>
 </Layout>
