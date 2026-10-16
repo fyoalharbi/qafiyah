@@ -1,0 +1,32 @@
+import { renderToStaticMarkup } from 'react-dom/server';
+import { describe, expect, it } from 'vitest';
+
+import { FeelingVerseItem } from './feeling-verse-item';
+
+import type { FeelingVerseRow } from '@/lib/server/feelings';
+
+const verse = (overrides: Partial<FeelingVerseRow>): FeelingVerseRow => ({
+  parts: ['وَرَدَ الفِراقُ عَلَيَّ يُتلِفُ مُهجَتي', 'يا بَرحَ قَلبي بِالفِراقِ الوارِدِ'],
+  position: 1,
+  feeling: { name: 'الحزن', slug: 'alhuzn' },
+  poem: { title: 'أجدر وأخلق أن ترن عوائدي', slug: 'btmd' },
+  poet: { name: 'البحتري', slug: 'abcd', hasAvatar: false, isAnonymous: false },
+  era: { name: 'عباسي', slug: 'abbasi' },
+  ...overrides,
+});
+
+const render = (row: FeelingVerseRow) => renderToStaticMarkup(<FeelingVerseItem verse={row} />);
+
+describe('FeelingVerseItem', () => {
+  it('names the poet and the era under the verse, and not the poem title', () => {
+    const html = render(verse({}));
+    expect(html).toContain('البحتري');
+    expect(html).toContain('عباسي');
+    expect(html).not.toContain('أجدر وأخلق أن ترن عوائدي');
+  });
+
+  it('labels every verse with its own feeling', () => {
+    expect(render(verse({}))).toContain('الحزن');
+    expect(render(verse({ feeling: { name: 'الأسى', slug: 'alasa' } }))).toContain('الأسى');
+  });
+});

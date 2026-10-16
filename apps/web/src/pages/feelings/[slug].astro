@@ -56,10 +56,12 @@ Astro.response.headers.set('Cache-Control', CACHE_HTML);
   <FeelingNavigation slot="head" />
   <div class="mx-auto flex w-full max-w-4xl flex-col gap-6 py-12" dir="rtl">
     <FeelingWheel tree={tree} path={path} />
-    <section class="flex flex-col gap-3 border-t border-border pt-8">
-      <h1 class="sr-only">{feeling.name}</h1>
-      <p class={cn(TYPE.caption, 'text-center text-text-subtle')}>{count}</p>
-      <ul class="flex flex-col">
+    <section class="flex flex-col gap-4 pt-8">
+      <div class="flex items-baseline justify-between gap-3">
+        <h1 class={cn(TYPE.caption, 'text-text-muted')}>أبيات في {feeling.name}</h1>
+        <p class={cn(TYPE.micro, 'text-text-subtle')}>{count}</p>
+      </div>
+      <ul class="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
         {found.verses.map((verse) => (
           <FeelingVerseItem verse={verse} />
         ))}
