@@ -821,9 +821,9 @@ Paths are relative to `apps/web/src/` unless they start at the repo root.
 
 ### The `/feelings` tree has its own SVG layout
 
-- **What:** `layoutUpright` places each feeling with its own constants, and estimates each label's width from its character count. The server renders the tree, and each label is an SVG `<text>` inside an SVG `<a>` to the feeling's page. The page draws a wide tree and a narrow tree, and a CSS container query shows one of them.
+- **What:** `layoutUpright` places each feeling with its own constants, and estimates each label's width from its character count. The server renders the tree, and each label is an SVG `<text>` inside an SVG `<a>` to the feeling's page. The page draws a wide tree and a narrow tree, and a CSS container query shows one of them. Each tree sits at the top of a frame as tall as the tree, so no empty band sits above or below it.
 - **Where:** `lib/feelings/upright-layout.ts`, `components/feelings/feeling-wheel.tsx`
-- **Why:** issue #263 asks for a tree that grows up from one question, and CSS cannot draw its curved branches. The server cannot measure text, so the label widths are estimates. The tests check that no label leaves the view box at either width. Both trees are in the HTML because the server cannot know the screen width.
+- **Why:** issue #263 asks for a tree that grows up from one root, and CSS cannot draw its curved branches. The server cannot measure text, so the label widths are estimates. At both widths, the tests check that every label stays inside the frame, and that the frame ends just under the lowest label. Both trees are in the HTML because the server cannot know the screen width.
 - **Normal approach:** a row of buttons for each level, laid out by CSS.
 - **Date:** 2026-10-11
 
