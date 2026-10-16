@@ -831,6 +831,7 @@ Paths are relative to `apps/web/src/` unless they start at the repo root.
 
 - **What:** the feelings pages turn on Astro's `<ClientRouter />`. Between two feelings pages, an `astro:before-swap` listener swaps the head as Astro does, then morphs `#main` with idiomorph.
   - Each tree node has a stable `id`, so the morph keeps it. Its CSS fade and the zoom `transform` then animate to the new page.
+  - Only a node that the morph adds draws or fades in: idiomorph's `afterNodeAdded` marks it `data-entering`. A full load or a reload shows the whole tree at once.
   - A node that leaves fades out for 300 ms, then is removed.
   - The server still renders every page. A link to any other page loads it in full: an `astro:before-preparation` listener stops the router before it fetches that page, or the server renders it twice (once for the router's fetch, once for the full load).
   - `prefetch: false` in `astro.config.mjs` stops `<ClientRouter />` from prefetching every link on hover. Each prefetch renders a page and calls the API.

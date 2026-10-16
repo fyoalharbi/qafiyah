@@ -94,7 +94,7 @@ function FeelingTree({ variant, layout, path, className }: FeelingTreeProps) {
             strokeLinecap="round"
             style={{ animationDelay: `${item.depth === 1 ? 0 : 120}ms` }}
             className={cn(
-              'transition-opacity duration-500 motion-safe:animate-feeling-draw',
+              'transition-opacity duration-500 motion-safe:data-entering:animate-feeling-draw',
               EDGE_CLASS[statusOf(item.path, path)]
             )}
           />
@@ -124,7 +124,7 @@ function FeelingTree({ variant, layout, path, className }: FeelingTreeProps) {
               }}
               className={cn(
                 'cursor-pointer stroke-surface transition-[opacity,fill] duration-500',
-                'motion-safe:animate-feeling-fade',
+                'motion-safe:in-data-entering:animate-feeling-fade',
                 LABEL_CLASS[statusOf(item.path, path)]
               )}
             >

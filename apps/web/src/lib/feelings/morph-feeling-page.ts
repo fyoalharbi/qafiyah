@@ -18,11 +18,15 @@ function fadeOutBeforeRemoving(node: Node): boolean {
   return false;
 }
 
+function markEntering(node: Node): void {
+  if (node instanceof SVGElement) node.dataset['entering'] = '';
+}
+
 export function morphMain(doc: Document): void {
   const next = doc.querySelector('#main');
   const main = document.querySelector('#main');
   if (next === null || main === null) return;
   void Idiomorph.morph(main, next, {
-    callbacks: { beforeNodeRemoved: fadeOutBeforeRemoving },
+    callbacks: { beforeNodeRemoved: fadeOutBeforeRemoving, afterNodeAdded: markEntering },
   });
 }
