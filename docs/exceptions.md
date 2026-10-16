@@ -838,7 +838,7 @@ Paths are relative to `apps/web/src/` unless they start at the repo root.
   - `prefetch: false` in `astro.config.mjs` stops `<ClientRouter />` from prefetching every link on hover. Each prefetch renders a page and calls the API.
   - The morph does not run the new page's scripts. So a script that a feelings page needs goes on both pages, like the verse copy button's (`components/feelings/verse-copy.astro`).
 - **Where:** `components/feelings/feeling-navigation.astro`, `components/feelings/verse-copy.astro`, `lib/feelings/morph-feeling-page.ts`, `components/feelings/feeling-wheel.tsx`, the `head` slot in `layouts/layout.astro`
-- **Why:** a full page load throws the tree away, so it redraws from nothing on every click. The tree must keep its place for the reader to see where they are in it. Astro's own swap replaces the whole body, and a view transition cannot animate elements inside an SVG.
+- **Why:** a full page load shows the tree already at the new feeling, so the move between feelings is a jump. The morph keeps the tree on screen and animates its zoom and fades. So the reader sees where they moved. Astro's own swap replaces the whole body, and a view transition cannot animate elements inside an SVG.
   - PostHog's `capture_pageview: 'history_change'` compares only the path, so a change of only `?page=` is not a pageview.
 - **Normal approach:** links that load each page in full, or Astro's `<ClientRouter />` with its default swap.
 - **Date:** 2026-10-15
