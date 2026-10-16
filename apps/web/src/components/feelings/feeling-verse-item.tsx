@@ -16,12 +16,12 @@ export function verseCopyText(verse: Pick<FeelingVerseRow, 'parts' | 'poet' | 'p
 export function FeelingVerseItem({ verse }: { readonly verse: FeelingVerseRow }) {
   const halves = verse.parts.length === 2;
   return (
-    <li className="group/card relative flex flex-col justify-between gap-4 rounded-sm border border-border px-4 py-4 transition-colors duration-300 hover:bg-surface-hover sm:px-5">
+    <li className="group/card relative -mx-2 flex flex-col justify-between gap-4 border-b border-border px-2 py-5 transition-colors duration-300 hover:bg-surface-hover">
       <a
         href={poemUrl(verse.poem.slug, [jumpTerm(verse.parts)])}
         className={cn(
           TYPE.caption,
-          'flex flex-col gap-0.5 text-text outline-none after:absolute after:inset-0 after:rounded-sm focus-visible:after:ring-1 focus-visible:after:ring-text sm:text-body'
+          'flex flex-col gap-0.5 text-text outline-none after:absolute after:inset-0 focus-visible:after:ring-1 focus-visible:after:ring-text sm:text-body'
         )}
       >
         {verse.parts.map((part, partIndex) => (

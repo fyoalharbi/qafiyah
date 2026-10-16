@@ -63,7 +63,7 @@ Astro.response.headers.set('Cache-Control', CACHE_HTML);
         <h1 class={cn(TYPE.caption, 'text-text-muted')}>أبيات في {feeling.name}</h1>
         <p class={cn(TYPE.micro, 'text-text-subtle')}>{count}</p>
       </div>
-      <ul class="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-4">
+      <ul class="grid grid-cols-1 md:grid-cols-2 md:gap-x-10">
         {found.verses.map((verse) => (
           <FeelingVerseItem verse={verse} />
         ))}
