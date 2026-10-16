@@ -2,17 +2,6 @@
 
 The `/feelings` page helps a reader who can't name what they feel. It draws the Feelings Wheel (Geoffrey Roberts, 2015) in Arabic, as a tree that grows from "بمَ تشعر؟". Each feeling links to its own page, `/feelings/<slug>`, which lists the classical verses that express it.
 
-## Unlisted for now
-
-The pages are live, but unlisted while the team reviews them. Nothing on the site links to them, the sitemap and `llms.txt` leave them out, and both pages carry `noindex` (`robotsIndex={false}`). The API endpoints are public, and the API reference lists them.
-
-To list the pages, do these steps:
-
-1. Add `/feelings` to `NAV_LINKS` in `apps/web/src/lib/constants/site-meta.ts`.
-2. Add the wheel and each feeling to `apps/web/src/pages/sitemap/taxonomies.xml.ts`.
-3. Add the pages to `well-known/llms.web.md` and the endpoints to `well-known/llms.api.md`. Then run `bun run well-known:generate`.
-4. Remove `robotsIndex={false}` from `pages/feelings/index.astro` and `pages/feelings/[slug].astro`. Add `/feelings` to the paths in `scripts/smoke/suites/seo.ts`.
-
 ## Shape
 
 - `scripts/db/sql/feelings.sql` creates two tables, and writes the tree at every database init.
