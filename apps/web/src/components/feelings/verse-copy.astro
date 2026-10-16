@@ -24,8 +24,9 @@
     const button = event.target.closest<HTMLButtonElement>('[data-copy-verse]');
     if (button === null) return;
     const label = button.title;
-    void navigator.clipboard.writeText(button.dataset['copyVerse'] ?? '').then(() => {
-      showCopied(button, label);
-    });
+    navigator.clipboard.writeText(button.dataset['copyVerse'] ?? '').then(
+      () => showCopied(button, label),
+      () => undefined
+    );
   });
 </script>
