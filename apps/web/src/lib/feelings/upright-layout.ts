@@ -25,7 +25,8 @@ export type UprightLayout = {
   readonly viewBox: ViewBox;
   readonly items: readonly PlacedFeeling[];
   readonly scale: number;
-  readonly center: Point;
+  readonly anchor: Point;
+  readonly height: number;
   readonly transform: string;
 };
 
@@ -46,6 +47,7 @@ const TRUNK_BOUNDS: readonly Point[] = [
 ];
 const MAX_ZOOM = 1.7;
 const FIT_MARGIN = 0.94;
+const FRAME_PAD = 14;
 const GLYPH_WIDTH_RATIO = 0.55;
 const LEAF_DROP = 140;
 
@@ -70,7 +72,7 @@ function rowPositionsRightToLeft(
 function fit(
   viewBox: ViewBox,
   points: readonly Point[]
-): Pick<UprightLayout, 'scale' | 'center' | 'transform'> {
+): Pick<UprightLayout, 'scale' | 'anchor' | 'height' | 'transform'> {
   const xs = points.map((point) => point.x);
   const ys = points.map((point) => point.y);
   const [minX, maxX, minY, maxY] = [
@@ -84,11 +86,12 @@ function fit(
     (viewBox.w * FIT_MARGIN) / Math.max(1, maxX - minX),
     (viewBox.h * FIT_MARGIN) / Math.max(1, maxY - minY)
   );
-  const center = { x: (minX + maxX) / 2, y: (minY + maxY) / 2 };
+  const anchor = { x: (minX + maxX) / 2, y: minY };
   return {
     scale,
-    center,
-    transform: `translate(${viewBox.x + viewBox.w / 2}px, ${viewBox.y + viewBox.h / 2}px) scale(${scale}) translate(${-center.x}px, ${-center.y}px)`,
+    anchor,
+    height: round((maxY - minY) * scale + 2 * FRAME_PAD),
+    transform: `translate(${viewBox.x + viewBox.w / 2}px, ${viewBox.y + FRAME_PAD}px) scale(${scale}) translate(${-anchor.x}px, ${-anchor.y}px)`,
   };
 }
 

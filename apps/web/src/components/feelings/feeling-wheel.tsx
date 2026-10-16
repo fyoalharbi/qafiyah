@@ -59,93 +59,102 @@ function FeelingTree({ variant, layout, path, className }: FeelingTreeProps) {
   const { viewBox } = layout;
   const nodeId = (part: string, key: string): string => `feeling-${variant}-${part}-${key}`;
   return (
-    <svg
-      id={`feeling-tree-${variant}`}
-      viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
-      direction="rtl"
-      role="group"
-      aria-label="شجرة المشاعر"
-      className={cn('h-auto w-full select-none', className)}
+    <div
+      id={`feeling-frame-${variant}`}
+      style={{ aspectRatio: `${viewBox.w} / ${layout.height}` }}
+      className={cn(
+        'overflow-hidden motion-safe:transition-[aspect-ratio] motion-safe:duration-700 motion-safe:ease-in-out',
+        className
+      )}
     >
-      <g
-        id={`feeling-zoom-${variant}`}
-        className="motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-in-out"
-        style={{
-          transform: layout.transform,
-          transformOrigin: '0 0',
-          transformBox: 'view-box',
-        }}
+      <svg
+        id={`feeling-tree-${variant}`}
+        viewBox={`${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`}
+        direction="rtl"
+        role="group"
+        aria-label="شجرة المشاعر"
+        className="block h-auto w-full select-none"
       >
-        <path
-          d={`M0 ${STEM_TOP_Y} L0 0`}
-          fill="none"
-          strokeLinecap="round"
-          className="stroke-highlight [stroke-width:2]"
-        />
-        {layout.items.map((item) => (
+        <g
+          id={`feeling-zoom-${variant}`}
+          className="motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-in-out"
+          style={{
+            transform: layout.transform,
+            transformOrigin: '0 0',
+            transformBox: 'view-box',
+          }}
+        >
           <path
-            key={item.key}
-            id={nodeId('edge', item.key)}
-            data-feeling-node=""
-            d={edgePath(item)}
+            d={`M0 ${STEM_TOP_Y} L0 0`}
             fill="none"
-            pathLength={1}
-            strokeDasharray={1}
             strokeLinecap="round"
-            style={{ animationDelay: `${item.depth === 1 ? 0 : 120}ms` }}
-            className={cn(
-              'transition-opacity duration-500 motion-safe:data-entering:animate-feeling-draw',
-              EDGE_CLASS[statusOf(item.path, path)]
-            )}
+            className="stroke-highlight [stroke-width:2]"
           />
-        ))}
-        {layout.items.map((item) => (
-          <a
-            key={item.key}
-            id={nodeId('label', item.key)}
-            data-feeling-node=""
-            href={feelingUrl(item.slug)}
-            aria-current={
-              item.path.length === path.length && startsWith(path, item.path) ? 'page' : undefined
-            }
-            className={LINK_CLASS}
-          >
+          {layout.items.map((item) => (
+            <path
+              key={item.key}
+              id={nodeId('edge', item.key)}
+              data-feeling-node=""
+              d={edgePath(item)}
+              fill="none"
+              pathLength={1}
+              strokeDasharray={1}
+              strokeLinecap="round"
+              style={{ animationDelay: `${item.depth === 1 ? 0 : 120}ms` }}
+              className={cn(
+                'transition-opacity duration-500 motion-safe:data-entering:animate-feeling-draw',
+                EDGE_CLASS[statusOf(item.path, path)]
+              )}
+            />
+          ))}
+          {layout.items.map((item) => (
+            <a
+              key={item.key}
+              id={nodeId('label', item.key)}
+              data-feeling-node=""
+              href={feelingUrl(item.slug)}
+              aria-current={
+                item.path.length === path.length && startsWith(path, item.path) ? 'page' : undefined
+              }
+              className={LINK_CLASS}
+            >
+              <text
+                x={item.point.x}
+                y={item.point.y}
+                textAnchor="middle"
+                dominantBaseline="central"
+                fontSize={FONT_SIZE_BY_DEPTH[item.depth]}
+                strokeWidth={6}
+                strokeLinejoin="round"
+                style={{
+                  paintOrder: 'stroke',
+                  animationDelay: `${item.depth === 1 ? 250 : 380}ms`,
+                }}
+                className={cn(
+                  'cursor-pointer stroke-surface transition-[opacity,fill] duration-500',
+                  'motion-safe:in-data-entering:animate-feeling-fade',
+                  LABEL_CLASS[statusOf(item.path, path)]
+                )}
+              >
+                {item.name}
+              </text>
+            </a>
+          ))}
+          <a href={feelingUrl()} className={LINK_CLASS}>
             <text
-              x={item.point.x}
-              y={item.point.y}
+              x={0}
+              y={TRUNK_LABEL_Y}
               textAnchor="middle"
               dominantBaseline="central"
-              fontSize={FONT_SIZE_BY_DEPTH[item.depth]}
-              strokeWidth={6}
-              strokeLinejoin="round"
-              style={{
-                paintOrder: 'stroke',
-                animationDelay: `${item.depth === 1 ? 250 : 380}ms`,
-              }}
-              className={cn(
-                'cursor-pointer stroke-surface transition-[opacity,fill] duration-500',
-                'motion-safe:in-data-entering:animate-feeling-fade',
-                LABEL_CLASS[statusOf(item.path, path)]
-              )}
+              fontSize={TRUNK_FONT_SIZE}
+              className="cursor-pointer fill-text-muted hover:fill-text"
             >
-              {item.name}
+              {TRUNK_LABEL}
             </text>
           </a>
-        ))}
-        <a href={feelingUrl()} className={LINK_CLASS}>
-          <text
-            x={0}
-            y={TRUNK_LABEL_Y}
-            textAnchor="middle"
-            dominantBaseline="central"
-            fontSize={TRUNK_FONT_SIZE}
-            className="cursor-pointer fill-text-muted hover:fill-text"
-          >
-            {TRUNK_LABEL}
-          </text>
-        </a>
-      </g>
-    </svg>
+        </g>
+      </svg>
+    </div>
   );
 }
 
