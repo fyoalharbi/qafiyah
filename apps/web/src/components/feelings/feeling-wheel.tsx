@@ -33,7 +33,10 @@ const EDGE_CLASS = {
 
 const TRUNK_LABEL = 'شجرة المشاعر';
 const TRUNK_FONT_SIZE = 26;
-const LINK_CLASS = 'outline-none focus-visible:[&>text]:underline';
+const LINK_CLASS = cn(
+  'transition-opacity outline-none focus-visible:[&>text]:underline',
+  'data-leaving:pointer-events-none data-leaving:opacity-0 data-leaving:duration-(--leave-ms) data-leaving:ease-out'
+);
 
 const startsWith = (path: readonly number[], prefix: readonly number[]): boolean =>
   prefix.length <= path.length && prefix.every((value, index) => path[index] === value);
@@ -103,6 +106,7 @@ function FeelingTree({ variant, layout, path, className }: FeelingTreeProps) {
               style={{ animationDelay: `${item.depth === 1 ? 0 : 120}ms` }}
               className={cn(
                 'transition-opacity duration-500 motion-safe:data-entering:animate-feeling-draw',
+                'data-leaving:pointer-events-none data-leaving:opacity-0 data-leaving:duration-(--leave-ms) data-leaving:ease-out',
                 EDGE_CLASS[statusOf(item.path, path)]
               )}
             />
