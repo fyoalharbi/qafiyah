@@ -4,7 +4,13 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { buildFeelingTree } from './feeling-tree';
-import { labelBox, layoutUpright, type Point, type UprightLayout } from './upright-layout';
+import {
+  FRAME_PAD,
+  labelBox,
+  layoutUpright,
+  type Point,
+  type UprightLayout,
+} from './upright-layout';
 
 const SEED = readFileSync(
   fileURLToPath(new URL('../../../../../scripts/db/sql/feelings.sql', import.meta.url)),
@@ -33,8 +39,6 @@ const WIDTHS = [
   { name: 'wide', narrow: false },
   { name: 'narrow', narrow: true },
 ] as const;
-
-const FRAME_PAD = 14;
 
 const toView = ({ viewBox, scale, anchor }: UprightLayout, point: Point): Point => ({
   x: viewBox.x + viewBox.w / 2 + scale * (point.x - anchor.x),

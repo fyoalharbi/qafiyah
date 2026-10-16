@@ -47,7 +47,7 @@ const TRUNK_BOUNDS: readonly Point[] = [
 ];
 const MAX_ZOOM = 1.7;
 const FIT_MARGIN = 0.94;
-const FRAME_PAD = 14;
+export const FRAME_PAD = 14;
 const GLYPH_WIDTH_RATIO = 0.55;
 const LEAF_DROP = 140;
 

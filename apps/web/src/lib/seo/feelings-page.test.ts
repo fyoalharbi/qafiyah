@@ -19,7 +19,7 @@ describe('buildFeelingsIndexSeo', () => {
   it('lists every feeling in the collection page, with a two-step breadcrumb', () => {
     const seo = buildFeelingsIndexSeo([sadness, grief]);
     const [page, crumbs] = seo.jsonLd;
-    expect(seo.title).toBe('عجلة المشاعر في الشعر العربي | قافية');
+    expect(seo.title).toBe('شجرة المشاعر في الشعر العربي | قافية');
     expect(page.mainEntity.itemListElement.map((entry) => entry.item.url)).toEqual([
       `${SITE_URL}/feelings/alhuzn`,
       `${SITE_URL}/feelings/alasa`,

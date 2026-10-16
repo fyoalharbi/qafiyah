@@ -23,7 +23,7 @@ import type { FeelingVerseRow } from '@/lib/server/feelings';
 
 const FEELINGS_CRUMB = 'المشاعر';
 const INDEX_DESCRIPTION =
-  'لا تعرف كيف تعبّر عن شعورك؟ اختر ما يقرب منه في عجلة المشاعر، واقرأ من الشعر ما يشبهه.';
+  'لا تعرف كيف تعبّر عن شعورك؟ اختر ما يقرب منه في شجرة المشاعر، واقرأ من الشعر ما يشبهه.';
 const ERAS_SPAN = 'من الشعر الجاهلي إلى الأندلسي';
 const ARCHIVE_TAIL = `ضمن أرشيف ${SITE_NAME_AR} الشامل للشعر العربي.`;
 
@@ -44,9 +44,9 @@ export function buildFeelingsIndexSeo(
   feelings: readonly FeelingSummary[]
 ): FeelingsSeo<CollectionRef> {
   const collectionJsonLd = collectionPageNode({
-    name: 'عجلة المشاعر',
+    name: 'شجرة المشاعر',
     url: `${SITE_URL}${feelingUrl()}`,
-    description: 'المشاعر في عجلة المشاعر بالعربية، مع أبيات الشعر العربي التي تعبّر عن كل منها',
+    description: 'المشاعر في شجرة المشاعر، مع أبيات الشعر العربي التي تعبّر عن كل منها',
     isPartOf: websiteRef(),
     mainEntity: buildItemList(
       feelings.map((feeling) =>
@@ -60,7 +60,7 @@ export function buildFeelingsIndexSeo(
     ),
   });
   return {
-    title: withBrand('عجلة المشاعر في الشعر العربي'),
+    title: withBrand('شجرة المشاعر في الشعر العربي'),
     description: INDEX_DESCRIPTION,
     jsonLd: [
       collectionJsonLd,
