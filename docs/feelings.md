@@ -1,6 +1,6 @@
 # Feelings
 
-The `/feelings` page helps a reader who can't name what they feel. It draws the Feelings Wheel (Geoffrey Roberts, 2015) in Arabic, as a tree that grows from "بمَ تشعر؟". Each feeling links to its own page, `/feelings/<slug>`, which lists the classical verses that express it.
+The `/feelings` page helps a reader who can't name what they feel. It draws the Feelings Wheel (Geoffrey Roberts, 2015) in Arabic, as a tree that grows from a root labeled "شجرة المشاعر". Each feeling links to its own page, `/feelings/<slug>`, which lists the classical verses that express it.
 
 ## Shape
 

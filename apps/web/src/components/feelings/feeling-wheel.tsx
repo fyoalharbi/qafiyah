@@ -31,7 +31,7 @@ const EDGE_CLASS = {
   resting: 'stroke-text-subtle opacity-50',
 } as const satisfies Record<Status, string>;
 
-const TRUNK_LABEL = 'بمَ تشعر؟';
+const TRUNK_LABEL = 'شجرة المشاعر';
 const TRUNK_FONT_SIZE = 26;
 const LINK_CLASS = 'outline-none focus-visible:[&>text]:underline';
 

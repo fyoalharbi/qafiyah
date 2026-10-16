@@ -41,8 +41,8 @@ const VIEW_BOX = {
 
 const ORIGIN: Point = { x: 0, y: 0 };
 const TRUNK_BOUNDS: readonly Point[] = [
-  { x: -70, y: -96 },
-  { x: 70, y: -96 },
+  { x: -90, y: -96 },
+  { x: 90, y: -96 },
 ];
 const MAX_ZOOM = 1.7;
 const FIT_MARGIN = 0.94;
