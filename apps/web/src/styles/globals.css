@@ -69,6 +69,24 @@
 
   --animate-feeling-draw: feeling-draw 600ms ease-out backwards;
   --animate-feeling-fade: feeling-fade 500ms ease-out backwards;
+  --animate-copy-check: copy-check var(--copy-hold) ease-out forwards;
+
+  @keyframes copy-check {
+    0% {
+      opacity: 0;
+      scale: 0.6;
+    }
+    12% {
+      opacity: 1;
+      scale: 1;
+    }
+    70% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
 
   @keyframes feeling-draw {
     from {

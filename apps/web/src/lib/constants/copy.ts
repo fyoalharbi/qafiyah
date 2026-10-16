@@ -36,6 +36,11 @@ export const SEARCH_TEXTS = {
   feelingsLabel: 'البحث بالمشاعر',
 } as const;
 
+export const FEELING_TEXTS = {
+  copyVerse: 'نسخ البيت',
+  verseCopied: 'تم نسخ البيت',
+} as const;
+
 export const POEM_TOOLBAR_TEXTS = {
   label: 'أدوات القراءة',
   fontSizeDecrease: 'تصغير خط القصيدة',
